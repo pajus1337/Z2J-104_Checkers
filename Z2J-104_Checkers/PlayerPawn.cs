@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    internal class Board
+    internal class PlayerPawn : Pawn
     {
+
     }
 }
