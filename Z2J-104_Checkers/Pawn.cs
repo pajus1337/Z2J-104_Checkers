@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    internal class Pawn
+    public class Pawn
     {
         public int PostionX { get; set; }
         public int PositionY { get; set; }

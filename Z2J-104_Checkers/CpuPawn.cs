@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    internal class CpuPawn : Pawn
+    public class CpuPawn : Pawn
     {
+        public CpuPawn()
+        {
+            PawnSymbol = 'C';
+        }
     }
 }

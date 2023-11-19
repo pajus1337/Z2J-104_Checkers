@@ -7,7 +7,9 @@ namespace Z2J_104_Checkers
         static void Main(string[] args)
         {
             MenuView menuView = new MenuView();
-
+            BoardManager boardManager = new BoardManager();
+            boardManager.test();
+            Console.ReadKey();
            
             int chosenOption = menuView.MainMenuOptionsView();
             switch (chosenOption)

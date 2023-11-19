@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    internal class PlayerPawn : Pawn
+    public class PlayerPawn : Pawn
     {
+        public PlayerPawn()
+        {
+            PawnSymbol = 'U';
+        }
 
     }
 }

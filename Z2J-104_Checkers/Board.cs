@@ -12,6 +12,8 @@ namespace Z2J_104_Checkers
         public readonly char BlacKField;
         public int WidthX { get; private set; }
         public int WidthY { get; private set; }
+        public char[,] boardArray { get; set; }
+
         
 
     public Board()
@@ -20,6 +22,7 @@ namespace Z2J_104_Checkers
             BlacKField = 'X';
             WidthX = 8;
             WidthY = 8;
+            boardArray = new char[WidthX, WidthY];
         }
     }
 }
