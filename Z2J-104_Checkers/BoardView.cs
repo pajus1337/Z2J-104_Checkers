@@ -9,36 +9,62 @@ namespace Z2J_104_Checkers
 {
     public class BoardView
     {
-        private Board _board;
+        private Board board;
 
-        private CpuPawn _cpuPawn;
-        private PlayerPawn _playerPawn;
-        private StringBuilder _stringBuilder;
+        private CpuPawn cpuPawn;
+        private PlayerPawn playerPawn;
+        private StringBuilder stringBuilder;
 
         public BoardView(Board board)
         {
-            _board = board;
-            _cpuPawn = new CpuPawn();
-            _playerPawn = new PlayerPawn();
-            _stringBuilder = new StringBuilder();
+            this.board = board;
+            cpuPawn = new CpuPawn();
+            playerPawn = new PlayerPawn();
+            stringBuilder = new StringBuilder();
         }
 
-        public void SetStartUpBoard()
+        public void CreateStartUpBoard()
         {
+            stringBuilder.Append(' ');
             int counter = 1;
-            for (int i = 1; i < _board.WidthY; i++)
-            {
-                for (int j = 1; j < _board.WidthX; j++)
+            int asciiChar = 65;
+            for (int i = 0; i < board.WidthY; i++)
+            {              
+                stringBuilder.Append(((char)asciiChar));
+                asciiChar++;
+                if (i == board.WidthX-1)
                 {
-                    if (counter % 2 == 0)
+                    stringBuilder.Append('\n');
+                }
+
+                for (int j = 0; j < board.WidthX; j++)
+                {
+                    if ( i%2 == 0)
                     {
-                        counter++;
-                        _board.boardArray[i, j] = _board.BlacKField;
+                        if (counter % 2 == 0)
+                        {
+                            counter++;
+                            board.boardArray[i, j] = board.BlacKField;
+                        }
+                        else
+                        {
+                            counter++;
+                            board.boardArray[i, j] = board.WhiteField;
+                        }
                     }
                     else
                     {
-                        counter++;
-                        _board.boardArray[i, j] = _board.WhiteField;
+                        if (counter % 2 == 1)
+                        {
+                            counter++;
+                            board.boardArray[i, j] = board.BlacKField;
+                        }
+                        else
+                        {
+                            counter++;
+                            board.boardArray[i, j] = board.WhiteField;
+                        }
+
                     }
                 }
             }
@@ -47,22 +73,23 @@ namespace Z2J_104_Checkers
 
         public void DisplayBoard()
         {
-            for (int i = 0; i < _board.WidthY; i++)
+            for (int i = 0; i < board.WidthY; i++)
             {
-                for (int k = 0; k <= _board.WidthX; k++)
+                stringBuilder.Append(i + 1);
+                for (int k = 0; k <= board.WidthX; k++)
                 {
-                    if (k == _board.WidthX)
+                    if (k == board.WidthX)
                     {
-                        _stringBuilder.Append('\n');
+                        stringBuilder.Append('\n');
                     }
                     else
                     {
-                        _stringBuilder.Append(_board.boardArray[i,k]);
+                        stringBuilder.Append(board.boardArray[i,k]);
                     }
 
                 }
             }
-            Console.WriteLine(_stringBuilder);
+            Console.WriteLine(stringBuilder);
         }
 
     }

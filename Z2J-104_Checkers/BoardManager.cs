@@ -18,7 +18,7 @@ namespace Z2J_104_Checkers
 
         public void test()
         {
-            _boardView.SetStartUpBoard();
+            _boardView.CreateStartUpBoard();
             _boardView.DisplayBoard();
         }
         
