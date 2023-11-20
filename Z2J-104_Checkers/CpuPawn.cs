@@ -8,9 +8,13 @@ namespace Z2J_104_Checkers
 {
     public class CpuPawn : Pawn
     {
-        public CpuPawn()
+        public CpuPawn(int postionX, int positionY, char pawnSymbol) : base(postionX, positionY, pawnSymbol)
         {
-            PawnSymbol = 'C';
         }
+        public CpuPawn(int postionX, int positionY) : base(postionX, positionY, 'C')
+        {
+
+        }
+
     }
 }

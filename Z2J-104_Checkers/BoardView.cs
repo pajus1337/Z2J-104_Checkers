@@ -10,16 +10,12 @@ namespace Z2J_104_Checkers
     public class BoardView
     {
         private Board board;
-
-        private CpuPawn cpuPawn;
-        private PlayerPawn playerPawn;
+        private List<Pawn> pawns = new List<Pawn>();
         private StringBuilder stringBuilder;
 
         public BoardView(Board board)
         {
             this.board = board;
-            cpuPawn = new CpuPawn();
-            playerPawn = new PlayerPawn();
             stringBuilder = new StringBuilder();
         }
 
@@ -29,17 +25,17 @@ namespace Z2J_104_Checkers
             int counter = 1;
             int asciiChar = 65;
             for (int i = 0; i < board.WidthY; i++)
-            {              
+            {
                 stringBuilder.Append(((char)asciiChar));
                 asciiChar++;
-                if (i == board.WidthX-1)
+                if (i == board.WidthX - 1)
                 {
                     stringBuilder.Append('\n');
                 }
 
                 for (int j = 0; j < board.WidthX; j++)
                 {
-                    if ( i%2 == 0)
+                    if (i % 2 == 0)
                     {
                         if (counter % 2 == 0)
                         {
@@ -84,7 +80,7 @@ namespace Z2J_104_Checkers
                     }
                     else
                     {
-                        stringBuilder.Append(board.boardArray[i,k]);
+                        stringBuilder.Append(board.boardArray[i, k]);
                     }
 
                 }
@@ -92,6 +88,42 @@ namespace Z2J_104_Checkers
             Console.WriteLine(stringBuilder);
         }
 
+        public Pawn AddCpuPawn(int positionX, int positionY)
+        {
+            return new CpuPawn(positionX, positionY);
+        }
+
+        public void AddPlayerPawn()
+        {
+
+        }
+
+        public void PlacePawnsForNewGame()
+        {
+            for (int y = 0; y <= 2; y++)
+            {
+                for (int x = 0; x < board.WidthX; x++)
+                {
+                    if (board.boardArray[y, x] == board.BlacKField)
+                    {
+                        //AddCpuPawn(x,y);
+                        var cpuPawn = AddCpuPawn(x, y); 
+                        board.boardArray[y, x] = cpuPawn.PawnSymbol;
+                        pawns.Add(cpuPawn);
+                    }
+                }
+            }
+
+            for (int i = 5; i <= 7; i++)
+            {
+                for (int x = 0; x < board.WidthX; x++)
+                {
+                    if (board.boardArray[i, x] == board.BlacKField)
+                    {
+                    }
+                }
+            }
+        }
     }
 }
 

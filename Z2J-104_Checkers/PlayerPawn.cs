@@ -8,11 +8,9 @@ namespace Z2J_104_Checkers
 {
     public class PlayerPawn : Pawn
     {
-        public PlayerPawn()
+        public PlayerPawn(int postionX, int positionY) : base(postionX, positionY, 'P')
         {
-            PawnSymbol = 'U';
         }
-
     }
 }
  

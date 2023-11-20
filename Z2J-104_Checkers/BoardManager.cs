@@ -8,18 +8,19 @@ namespace Z2J_104_Checkers
 {
     public class BoardManager 
     {
-        private BoardView _boardView;
+        private BoardView boardView;
 
         public BoardManager()
         {
             Board board = new Board();
-            _boardView = new BoardView(board);
+            boardView = new BoardView(board);
         }
 
         public void test()
         {
-            _boardView.CreateStartUpBoard();
-            _boardView.DisplayBoard();
+            boardView.CreateStartUpBoard();
+            boardView.PlacePawnsForNewGame();
+            boardView.DisplayBoard();
         }
         
     }
