@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    public class Pawn
+    public class Pawn 
     {
+        public int PawnId { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
         public char PawnSymbol { get; set; }
+        public bool isPlayer { get; set; }
 
-        public Pawn(int postionX, int positionY, char pawnSymbol)
+        public Pawn(int postionX, int positionY, char pawnSymbol, bool is_Player)
         {
             PositionX = postionX;
             PositionY = positionY;
             PawnSymbol = pawnSymbol;
+            isPlayer = is_Player;
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Z2J_104_Checkers
 
         public BoardManager()
         {
+            
             Board board = new Board();
             boardView = new BoardView(board);
         }
@@ -21,6 +22,7 @@ namespace Z2J_104_Checkers
             boardView.CreateStartUpBoard();
             boardView.PlacePawnsForNewGame();
             boardView.DisplayBoard();
+            boardView.
         }
         
     }

@@ -88,9 +88,13 @@ namespace Z2J_104_Checkers
             Console.WriteLine(stringBuilder);
         }
 
-        public Pawn AddCpuPawn(int positionX, int positionY)
+        public Pawn AddPawn(int positionX, int positionY, bool isPlayerPawn)
         {
-            return new CpuPawn(positionX, positionY);
+            if (!isPlayerPawn)
+            {
+                return new CpuPawn(positionX, positionY);
+            }
+            return new PlayerPawn(positionX, positionY);
         }
 
         public void AddPlayerPawn()
@@ -106,23 +110,30 @@ namespace Z2J_104_Checkers
                 {
                     if (board.boardArray[y, x] == board.BlacKField)
                     {
-                        //AddCpuPawn(x,y);
-                        var cpuPawn = AddCpuPawn(x, y); 
+                        var cpuPawn = AddPawn(x, y, false); 
                         board.boardArray[y, x] = cpuPawn.PawnSymbol;
                         pawns.Add(cpuPawn);
                     }
                 }
             }
 
-            for (int i = 5; i <= 7; i++)
+            for (int y = 5; y <= 7; y++)
             {
                 for (int x = 0; x < board.WidthX; x++)
                 {
-                    if (board.boardArray[i, x] == board.BlacKField)
+                    if (board.boardArray[y, x] == board.BlacKField)
                     {
+                        var playerPawn = AddPawn(x, y, true);
+                        board.boardArray[y, x] = playerPawn.PawnSymbol;
+                        pawns.Add(playerPawn);
                     }
                 }
             }
+        }
+
+        public void MovePawn(int y, int x)
+        {
+
         }
     }
 }

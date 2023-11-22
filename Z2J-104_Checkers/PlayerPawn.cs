@@ -8,7 +8,7 @@ namespace Z2J_104_Checkers
 {
     public class PlayerPawn : Pawn
     {
-        public PlayerPawn(int postionX, int positionY) : base(postionX, positionY, 'P')
+        public PlayerPawn(int postionX, int positionY) : base(postionX, positionY, 'P', true)
         {
         }
     }
