@@ -7,7 +7,7 @@ namespace Z2J_104_Checkers
         static void Main(string[] args)
         {
             MenuView menuView = new MenuView();
-            BoardManager boardManager = new BoardManager();
+            GameManager boardManager = new GameManager();
             boardManager.test();
             Console.ReadKey();
            

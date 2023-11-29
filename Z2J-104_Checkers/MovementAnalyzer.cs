@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    public class CpuPawn : Pawn
+    public class MovementAnalyzer
     {
 
-        public CpuPawn(int postionX, int positionY) : base(postionX, positionY, 'C', false)
-        {
-        }
     }
 }

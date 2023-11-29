@@ -14,8 +14,6 @@ namespace Z2J_104_Checkers
         public int WidthY { get; private set; }
         public char[,] boardArray { get; set; }
 
-        
-
     public Board()
         {
             WhiteField = 'O';
