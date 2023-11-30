@@ -50,6 +50,14 @@ namespace Z2J_104_Checkers
             }
             return new PlayerPawn(positionX, positionY);
         }
+        public void MovePawn()
+        {
+            int letters_axis = new MenuView().EntryPawnPosition(nameof(letters_axis)); // X
+            int digits_axis = new MenuView().EntryPawnPosition(nameof(digits_axis)); // y
+
+        }
+        public bool CheckIfPawnExistOnBoard(int x, int y) => pawns.Any(p => p.PositionX == x && p.PositionY == y);
+
     }
 }
 

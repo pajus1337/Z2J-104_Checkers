@@ -1,18 +1,10 @@
-﻿using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Z2J_104_Checkers
 {
-    internal class MenuView
+    public class MenuView
     {
+        public static UserInputValidator userInputValidator = new UserInputValidator();
         public void WelcomeMessage()
         {
             Console.WriteLine("Welcome to a simple game: checkers");
@@ -20,7 +12,6 @@ namespace Z2J_104_Checkers
             Console.WriteLine($"- Computer pawns are marked 'C'\n- Player pawns are marked 'U'\nHave a nice game\n");
             Console.WriteLine($"Press any key to start");
             Console.ReadKey();
-            
         }
 
         public int MainMenuOptionsView()
@@ -44,5 +35,42 @@ namespace Z2J_104_Checkers
                 Console.ReadKey();
             } while (true);
         }
+
+        public int EntryPawnPosition(string selectedAxis)
+        {
+            if (selectedAxis == "letters_axis")
+            {
+                ConsoleKeyInfo userKey;
+                do
+                {
+                    Console.WriteLine($"Enter a value [A,B,C,D .. etc] in the visible range of {selectedAxis}");
+                    userKey = Console.ReadKey(true);
+                } while (!userInputValidator.ChosenCorrectLetter(userKey.KeyChar));
+
+                Enum.TryParse<BoardLetters>(userKey, out BoardLetters result);
+                return (int)result;
+
+            }
+            else
+            {
+                do
+                {
+                    Console.WriteLine($"Enter a value [1,2,3,4 .. etc] in the visible range of {selectedAxis}");
+
+                } while (new UserInputValidator().ChosenCorrectNumber(Console.ReadKey(true).KeyChar));
+                return int.Parse(selectedAxis);
+            }
+        }
+
+        public int EntryNewMovePosition()
+        {
+            return 0;
+        }
+
+        public void EntryNewPawnPosiition()
+        {
+
+        }
+
     }
 }

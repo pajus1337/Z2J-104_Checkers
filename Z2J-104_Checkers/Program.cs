@@ -7,8 +7,8 @@ namespace Z2J_104_Checkers
         static void Main(string[] args)
         {
             MenuView menuView = new MenuView();
-            GameManager boardManager = new GameManager();
-            boardManager.test();
+            GameManager gameManager = new GameManager();
+            gameManager.test();
             Console.ReadKey();
            
             int chosenOption = menuView.MainMenuOptionsView();

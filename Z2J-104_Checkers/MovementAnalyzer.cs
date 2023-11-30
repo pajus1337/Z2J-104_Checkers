@@ -9,5 +9,7 @@ namespace Z2J_104_Checkers
     public class MovementAnalyzer
     {
 
+
+        
     }
 }
