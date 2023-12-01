@@ -8,7 +8,6 @@ namespace Z2J_104_Checkers
 {
     public class BoardBuilder
     {
-
         public static Board CreateNewGameBoard()
         {
             Board board = new Board();

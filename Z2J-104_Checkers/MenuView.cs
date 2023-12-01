@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Z2J_104_Checkers
 {
@@ -36,41 +37,59 @@ namespace Z2J_104_Checkers
             } while (true);
         }
 
-        public int EntryPawnPosition(string selectedAxis)
+        public int EntryPosition(string selectedAxis)
         {
             if (selectedAxis == "letters_axis")
             {
-                ConsoleKeyInfo userKey;
+                char userKey;
+                int resultValue;
+                bool isWrongValue;
                 do
                 {
                     Console.WriteLine($"Enter a value [A,B,C,D .. etc] in the visible range of {selectedAxis}");
-                    userKey = Console.ReadKey(true);
-                } while (!userInputValidator.ChosenCorrectLetter(userKey.KeyChar));
+                    userKey = Console.ReadKey(true).KeyChar;
+                    (resultValue, isWrongValue) = userInputValidator.IsChosenCorrectLetter(userKey);
+                    if (isWrongValue)
+                    {
+                        Console.WriteLine($"The entered value [{userKey}] is wrong");
+                    }
 
-                Enum.TryParse<BoardLetters>(userKey, out BoardLetters result);
-                return (int)result;
+                } while (isWrongValue);
+                return resultValue;
 
             }
             else
             {
+                char userKey;
+                int resultValue;
+                bool isWrongValue;
                 do
                 {
-                    Console.WriteLine($"Enter a value [1,2,3,4 .. etc] in the visible range of {selectedAxis}");
-
-                } while (new UserInputValidator().ChosenCorrectNumber(Console.ReadKey(true).KeyChar));
-                return int.Parse(selectedAxis);
+                    Console.WriteLine($"Enter a value [A,B,C,D .. etc] in the visible range of {selectedAxis}");
+                    userKey = Console.ReadKey(true).KeyChar;
+                    (resultValue, isWrongValue) = userInputValidator.IsChosenCorrectNumber(userKey);
+                    if (isWrongValue)
+                    {
+                        Console.WriteLine($"The entered value [{userKey}] is wrong");
+                    }
+                } while (isWrongValue);
+                return resultValue;
             }
         }
 
-        public int EntryNewMovePosition()
+        public void SelectPawnToMove()
         {
-            return 0;
+            Console.WriteLine($"Specify the position of the pawn to be moved.");       
         }
 
-        public void EntryNewPawnPosiition()
+        public void SelectNewPostionForPawn()
         {
-
+            Console.WriteLine($"Specify the new position for the pawn to be moved.");
         }
 
+        public void WrongPawnChoice()
+        {
+            Console.WriteLine("There is no pawn under this position.");
+        }
     }
 }

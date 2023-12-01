@@ -9,24 +9,33 @@ namespace Z2J_104_Checkers
 {
     public class UserInputValidator
     {
-       public bool ChosenCorrectLetter(char userInput)
+       public (int, bool)IsChosenCorrectLetter(char userInput)
         {
-            if (!char.IsDigit(userInput))
+            bool isWrongValue = true;
+            if (!char.IsDigit(userInput) && char.ToUpper(userInput) >= 65 && char.ToUpper(userInput) <= 72)
             {
+                Enum.TryParse<BoardLetters>(userInput.ToString(), true, out BoardLetters result); ;
                 Console.WriteLine("Good its not a digit");
-                return true;
+                return ((int)result, !isWrongValue);
             }
-            return false;
+            else
+            {
+                return (-1, isWrongValue);
+            }
         }
 
-        public bool ChosenCorrectNumber(char userInput)
+        public (int, bool) IsChosenCorrectNumber(char userInput)
         {
-            if (char.IsDigit(userInput))
+            bool isWrongValue = true;
+            if (char.IsDigit(userInput) && (userInput >= 1 && userInput <= 8))
             {
                 Console.WriteLine("Good its a digit");
-                return true;
+                return (--userInput, !isWrongValue);
             }
-            return false;
+            else
+            {
+                return (-1, isWrongValue);
+            }
         }
 
         public int PassCheckedUserInput(int approvedUserInput) => approvedUserInput;

@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Z2J_104_Checkers
+﻿namespace Z2J_104_Checkers
 {
     public class PawnController
     {
         private List<Pawn> pawns = new List<Pawn>();
+        MenuView menuView;
+        int chosenPositionX = -1;
+        int chosenPositionY = -1;
+
+        public PawnController(MenuView menuView)
+        {
+            this.menuView = menuView;
+        }
 
         public Board PlacePawnsForNewGame(Board board)
         {
@@ -50,11 +51,43 @@ namespace Z2J_104_Checkers
             }
             return new PlayerPawn(positionX, positionY);
         }
-        public void MovePawn()
-        {
-            int letters_axis = new MenuView().EntryPawnPosition(nameof(letters_axis)); // X
-            int digits_axis = new MenuView().EntryPawnPosition(nameof(digits_axis)); // y
 
+        public Pawn SelectPawn()
+        {
+            menuView.SelectPawnToMove();
+
+            int letters_axis = menuView.EntryPosition(nameof(letters_axis)); 
+            int digits_axis = menuView.EntryPosition(nameof(digits_axis)); 
+
+            Pawn? selectedPawn = pawns.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
+            if (selectedPawn == null)
+            {
+                menuView.WrongPawnChoice();
+            }
+            return selectedPawn;
+        }
+
+        public (int, int) SelectNewPawnPostion()
+        {
+            menuView.SelectNewPostionForPawn();
+
+            int letters_axis = menuView.EntryPosition(nameof(letters_axis));
+            int digits_axis = menuView.EntryPosition(nameof(digits_axis));
+
+            return (digits_axis, letters_axis);
+        }
+        
+
+        public void Test((int x, int y) position)
+        {
+
+        }
+        public void MovePawn(Pawn pawn)
+        {
+            Test(SelectNewPawnPostion());
+
+            int letters_axis = new MenuView().EntryPosition(nameof(letters_axis)); // X
+            int digits_axis = new MenuView().EntryPosition(nameof(digits_axis)); // y
         }
         public bool CheckIfPawnExistOnBoard(int x, int y) => pawns.Any(p => p.PositionX == x && p.PositionY == y);
 
