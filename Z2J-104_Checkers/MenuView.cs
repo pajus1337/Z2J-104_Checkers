@@ -65,7 +65,7 @@ namespace Z2J_104_Checkers
                 bool isWrongValue;
                 do
                 {
-                    Console.WriteLine($"Enter a value [A,B,C,D .. etc] in the visible range of {selectedAxis}");
+                    Console.WriteLine($"Enter a value [1,2,3,4 .. etc] in the visible range of {selectedAxis}");
                     userKey = Console.ReadKey(true).KeyChar;
                     (resultValue, isWrongValue) = userInputValidator.IsChosenCorrectNumber(userKey);
                     if (isWrongValue)

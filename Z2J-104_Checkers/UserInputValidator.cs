@@ -27,10 +27,10 @@ namespace Z2J_104_Checkers
         public (int, bool) IsChosenCorrectNumber(char userInput)
         {
             bool isWrongValue = true;
-            if (char.IsDigit(userInput) && (userInput >= 1 && userInput <= 8))
+            if (char.IsDigit(userInput) && (userInput >= '1' && userInput <= '8'))
             {
                 Console.WriteLine("Good its a digit");
-                return (--userInput, !isWrongValue);
+                return (userInput - '1', !isWrongValue);
             }
             else
             {

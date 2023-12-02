@@ -27,13 +27,11 @@ namespace Z2J_104_Checkers
         public void test()
         {
             boardView.DisplayCurrentBoard(gameBoard);
-            Console.WriteLine(pawnController.CheckIfPawnExistOnBoard(0, 1));
-        }
-
-        public void MovePawn()
-        {
-            int letters_axis = menuView.EntryPosition(nameof(letters_axis)); // X
-            int digits_axis = menuView.EntryPosition(nameof(digits_axis)); // y
+            //pawnController.SelectPawn();
+            //pawnController.SelectNewPawnPostion();
+            pawnController.MovePawn();
+            BoardBuilder.UpdateBoardState(gameBoard,pawnController.PawnsInGame);
+            boardView.DisplayCurrentBoard(gameBoard);
         }
     }
 }

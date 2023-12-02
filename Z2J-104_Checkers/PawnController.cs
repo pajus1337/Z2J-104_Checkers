@@ -2,7 +2,7 @@
 {
     public class PawnController
     {
-        private List<Pawn> pawns = new List<Pawn>();
+        public List<Pawn> PawnsInGame { get; private set; }
         MenuView menuView;
         int chosenPositionX = -1;
         int chosenPositionY = -1;
@@ -10,6 +10,7 @@
         public PawnController(MenuView menuView)
         {
             this.menuView = menuView;
+            PawnsInGame = new List<Pawn>();
         }
 
         public Board PlacePawnsForNewGame(Board board)
@@ -23,7 +24,7 @@
                     {
                         var cpuPawn = CreatePawn(x, y, false);
                         board.boardArray[y, x] = cpuPawn.PawnSymbol;
-                        pawns.Add(cpuPawn);
+                        PawnsInGame.Add(cpuPawn);
                     }
                 }
             }
@@ -36,7 +37,7 @@
                     {
                         var playerPawn = CreatePawn(x, y, true);
                         board.boardArray[y, x] = playerPawn.PawnSymbol;
-                        pawns.Add(playerPawn);
+                        PawnsInGame.Add(playerPawn);
                     }
                 }
             }
@@ -59,7 +60,7 @@
             int letters_axis = menuView.EntryPosition(nameof(letters_axis)); 
             int digits_axis = menuView.EntryPosition(nameof(digits_axis)); 
 
-            Pawn? selectedPawn = pawns.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
+            Pawn? selectedPawn = PawnsInGame.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
             if (selectedPawn == null)
             {
                 menuView.WrongPawnChoice();
@@ -74,22 +75,27 @@
             int letters_axis = menuView.EntryPosition(nameof(letters_axis));
             int digits_axis = menuView.EntryPosition(nameof(digits_axis));
 
+            // Add MovementAnalyzer
+
+
             return (digits_axis, letters_axis);
         }
         
+        public void MovePawn()
+        {
+            int positionY;
+            int positionX;
+            var SelectedPawn = SelectPawn();
+            (positionY, positionX ) = SelectNewPawnPostion();
+            SelectedPawn.PositionX = positionX; 
+            SelectedPawn.PositionY = positionY;
+        }
 
-        public void Test((int x, int y) position)
+        public void UpdatePawnPosition(Pawn pawn ,int positionX, int PositionY)
         {
 
         }
-        public void MovePawn(Pawn pawn)
-        {
-            Test(SelectNewPawnPostion());
-
-            int letters_axis = new MenuView().EntryPosition(nameof(letters_axis)); // X
-            int digits_axis = new MenuView().EntryPosition(nameof(digits_axis)); // y
-        }
-        public bool CheckIfPawnExistOnBoard(int x, int y) => pawns.Any(p => p.PositionX == x && p.PositionY == y);
+        public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y) ;
 
     }
 }

@@ -15,7 +15,7 @@ namespace Z2J_104_Checkers
             return board;
         }
 
-        public static void FillNewBoard(Board board)
+        private static void FillNewBoard(Board board)
         {
             int counter = 1;
 
@@ -47,6 +47,53 @@ namespace Z2J_104_Checkers
                         {
                             counter++;
                             board.boardArray[i, j] = board.WhiteField;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void UpdateBoardState(Board board, List<Pawn> pawnList)
+        {
+            int counter = 1;
+
+            for (int y = 0; y < board.WidthY; y++)
+            {
+                for (int x = 0; x < board.WidthX; x++)
+                {
+                    
+                    {
+                        if (y % 2 == 0)
+                        {
+                            if (counter % 2 == 0)
+                            {
+                                counter++;
+                                board.boardArray[y, x] = board.BlacKField;
+                            }
+                            else
+                            {
+                                counter++;
+                                board.boardArray[y, x] = board.WhiteField;
+                            }
+                        }
+                        else
+                        {
+                            if (counter % 2 == 1)
+                            {
+                                counter++;
+                                board.boardArray[y, x] = board.BlacKField;
+                            }
+                            else
+                            {
+                                counter++;
+                                board.boardArray[y, x] = board.WhiteField;
+                            }
+                        }
+
+                        var pawn = pawnList.FirstOrDefault(p => p.PositionY == y && p.PositionX == x);
+                        if (pawn != null)
+                        {
+                            board.boardArray[y, x] = pawn.PawnSymbol;
                         }
                     }
                 }

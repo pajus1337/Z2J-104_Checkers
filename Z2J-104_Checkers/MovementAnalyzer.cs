@@ -13,7 +13,6 @@ namespace Z2J_104_Checkers
         {
 
 
-            return true;
         }
         
     }
