@@ -6,32 +6,36 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    public class GameManager
+    public class GameManager : IGameManager
     {
         PawnController pawnController;
-        Board gameBoard;
+        public Board GameBoard { get; private set; }
         BoardView boardView;
-        MovementAnalyzer movementAnalyzer;
+        private MovementAnalyzer movementAnalyzer;
         MenuView menuView;
 
 
         public GameManager(MenuView menuView)
         {
             this.menuView = menuView;
-            this.pawnController = new PawnController(this.menuView);
-            this.gameBoard = pawnController.PlacePawnsForNewGame(BoardBuilder.CreateNewGameBoard());
+            this.pawnController = new PawnController(this.menuView,this);
+            this.GameBoard = pawnController.PlacePawnsForNewGame(BoardBuilder.CreateNewGameBoard());
             this.boardView = new BoardView();
             this.movementAnalyzer = new MovementAnalyzer();
         }
 
         public void test()
         {
-            boardView.DisplayCurrentBoard(gameBoard);
+            boardView.DisplayCurrentBoard(GameBoard);
             //pawnController.SelectPawn();
             //pawnController.SelectNewPawnPostion();
             pawnController.MovePawn();
-            BoardBuilder.UpdateBoardState(gameBoard,pawnController.PawnsInGame);
-            boardView.DisplayCurrentBoard(gameBoard);
+            BoardBuilder.UpdateBoardState(GameBoard,pawnController.PawnsInGame);
+            boardView.DisplayCurrentBoard(GameBoard);
         }
+
+        public Board GetBoard() => this.GameBoard;
+
+        public MovementAnalyzer GetMovementAnalyzer() => this.movementAnalyzer;
     }
 }

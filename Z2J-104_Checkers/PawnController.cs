@@ -1,16 +1,18 @@
 ﻿namespace Z2J_104_Checkers
 {
-    public class PawnController
+    public class PawnController : IGameManager
     {
         public List<Pawn> PawnsInGame { get; private set; }
+        private IGameManager gameManager;
         MenuView menuView;
         int chosenPositionX = -1;
         int chosenPositionY = -1;
 
-        public PawnController(MenuView menuView)
+        public PawnController(MenuView menuView, IGameManager gameManager)
         {
             this.menuView = menuView;
             PawnsInGame = new List<Pawn>();
+            this.gameManager = gameManager;
         }
 
         public Board PlacePawnsForNewGame(Board board)
@@ -87,8 +89,15 @@
             int positionX;
             var SelectedPawn = SelectPawn();
             (positionY, positionX ) = SelectNewPawnPostion();
-            SelectedPawn.PositionX = positionX; 
-            SelectedPawn.PositionY = positionY;
+            if (GetMovementAnalyzer().IsRightField(GetBoard(), positionX, positionY) && GetMovementAnalyzer().IsFreeFromPawn(GetBoard(),positionX,positionY))
+            {
+                SelectedPawn.PositionX = positionX;
+                SelectedPawn.PositionY = positionY;
+            }
+            else
+            {
+                menuView.MoveFailed();
+            }
         }
 
         public void UpdatePawnPosition(Pawn pawn ,int positionX, int PositionY)
@@ -97,6 +106,9 @@
         }
         public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y) ;
 
+        public Board GetBoard() => gameManager.GetBoard();
+
+        public MovementAnalyzer GetMovementAnalyzer() => gameManager.GetMovementAnalyzer();
     }
 }
 

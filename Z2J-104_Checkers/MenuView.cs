@@ -10,7 +10,7 @@ namespace Z2J_104_Checkers
         {
             Console.WriteLine("Welcome to a simple game: checkers");
             Console.WriteLine($"Some important information before you start playing,\n-The size of the board is 8x8\n- The white squares are marked 'O'\n- The black squares are marked 'X'\n");
-            Console.WriteLine($"- Computer pawns are marked 'C'\n- Player pawns are marked 'U'\nHave a nice game\n");
+            Console.WriteLine($"- Computer pawns are marked \n- Player pawns are marked 'U'\nHave a nice game\n");
             Console.WriteLine($"Press any key to start");
             Console.ReadKey();
         }
@@ -90,6 +90,11 @@ namespace Z2J_104_Checkers
         public void WrongPawnChoice()
         {
             Console.WriteLine("There is no pawn under this position.");
+        }
+
+        public void MoveFailed()
+        {
+            Console.WriteLine("An impossible move was made");
         }
     }
 }

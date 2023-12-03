@@ -16,8 +16,8 @@ namespace Z2J_104_Checkers
 
     public Board()
         {
-            WhiteField = 'O';
-            BlacKField = 'X';
+            WhiteField = '\u2588';
+            BlacKField = '\u2593';
             WidthX = 8;
             WidthY = 8;
             boardArray = new char[WidthX, WidthY];
