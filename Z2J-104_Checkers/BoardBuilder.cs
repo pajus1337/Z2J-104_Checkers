@@ -28,7 +28,7 @@ namespace Z2J_104_Checkers
                         if (counter % 2 == 0)
                         {
                             counter++;
-                            board.boardArray[i, j] = board.BlacKField;
+                            board.boardArray[i, j] = board.BlackField;
                         }
                         else
                         {
@@ -41,7 +41,7 @@ namespace Z2J_104_Checkers
                         if (counter % 2 == 1)
                         {
                             counter++;
-                            board.boardArray[i, j] = board.BlacKField;
+                            board.boardArray[i, j] = board.BlackField;
                         }
                         else
                         {
@@ -68,7 +68,7 @@ namespace Z2J_104_Checkers
                             if (counter % 2 == 0)
                             {
                                 counter++;
-                                board.boardArray[y, x] = board.BlacKField;
+                                board.boardArray[y, x] = board.BlackField;
                             }
                             else
                             {
@@ -81,7 +81,7 @@ namespace Z2J_104_Checkers
                             if (counter % 2 == 1)
                             {
                                 counter++;
-                                board.boardArray[y, x] = board.BlacKField;
+                                board.boardArray[y, x] = board.BlackField;
                             }
                             else
                             {

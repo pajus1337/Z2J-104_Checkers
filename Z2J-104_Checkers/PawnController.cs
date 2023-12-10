@@ -22,7 +22,7 @@
             {
                 for (int x = 0; x < board.WidthX; x++)
                 {
-                    if (board.boardArray[y, x] == board.BlacKField)
+                    if (board.boardArray[y, x] == board.BlackField)
                     {
                         var cpuPawn = CreatePawn(x, y, false);
                         board.boardArray[y, x] = cpuPawn.PawnSymbol;
@@ -31,11 +31,18 @@
                 }
             }
 
+            //TEST TO REMOVE !! ! ! ! ! ! ! ! !
+            var dummyPawn = new CpuPawn(3,4);
+            PawnsInGame.Add(dummyPawn);
+            board.boardArray[dummyPawn.PositionY,dummyPawn.PositionX] = dummyPawn.PawnSymbol;
+            /// END 
+            /// 
+
             for (int y = 5; y <= 7; y++)
             {
                 for (int x = 0; x < board.WidthX; x++)
                 {
-                    if (board.boardArray[y, x] == board.BlacKField)
+                    if (board.boardArray[y, x] == board.BlackField)
                     {
                         var playerPawn = CreatePawn(x, y, true);
                         board.boardArray[y, x] = playerPawn.PawnSymbol;
@@ -70,7 +77,7 @@
             return selectedPawn;
         }
 
-        public (int, int) SelectNewPawnPostion()
+        public (int, int) SelectNewPawnPosition()
         {
             menuView.SelectNewPostionForPawn();
 
@@ -85,14 +92,19 @@
         
         public void MovePawn()
         {
-            int positionY;
-            int positionX;
+            int newPositionY;
+            int newPositionX;
+            var gameBoard = GetBoard();
             var SelectedPawn = SelectPawn();
-            (positionY, positionX ) = SelectNewPawnPostion();
-            if (GetMovementAnalyzer().IsRightField(GetBoard(), positionX, positionY) && GetMovementAnalyzer().IsFreeFromPawn(GetBoard(),positionX,positionY))
+            var movementAnalyzer = GetMovementAnalyzer();
+
+            (newPositionY, newPositionX) = SelectNewPawnPosition();
+
+
+            if (movementAnalyzer.IsAllowedMovement(gameBoard,PawnsInGame, SelectedPawn, newPositionY, newPositionX))
             {
-                SelectedPawn.PositionX = positionX;
-                SelectedPawn.PositionY = positionY;
+                SelectedPawn.PositionX = newPositionX;
+                SelectedPawn.PositionY = newPositionY;
             }
             else
             {

@@ -18,6 +18,7 @@ namespace Z2J_104_Checkers
 
         public void DisplayCurrentBoard(Board board)
         {
+            stringBuilder.Clear();
             int asciiChar = 65;
             stringBuilder.Append(' ');
             for (int i = 0; i < board.WidthY; i++)
@@ -30,6 +31,7 @@ namespace Z2J_104_Checkers
                 }
             }
 
+
             for (int y = 0; y < board.WidthY; y++)
             {
                 stringBuilder.Append(y + 1);
@@ -37,12 +39,25 @@ namespace Z2J_104_Checkers
                 {
                     if (x == board.WidthX)
                     {
+                        stringBuilder.Append(y + 1);
                         stringBuilder.Append('\n');
                     }
                     else
                     {
                         stringBuilder.Append(board.boardArray[y, x]);
                     }
+                }
+            }
+
+            asciiChar = 65;
+            stringBuilder.Append(' ');
+            for (int i = 0; i < board.WidthY; i++)
+            {          
+                stringBuilder.Append(((char)asciiChar));
+                asciiChar++;
+                if (i == board.WidthX - 1)
+                {
+                    stringBuilder.Append('\n');
                 }
             }
             Console.WriteLine(stringBuilder);

@@ -12,14 +12,18 @@ namespace Z2J_104_Checkers
         public int PositionX { get; set; }
         public int PositionY { get; set; }
         public char PawnSymbol { get; set; }
-        public bool isPlayer { get; set; }
+        public bool IsPlayer { get; set; }
+        public bool IsSuperPawn { get; private set; } = false;
 
         public Pawn(int postionX, int positionY, char pawnSymbol, bool is_Player)
         {
             PositionX = postionX;
             PositionY = positionY;
             PawnSymbol = pawnSymbol;
-            isPlayer = is_Player;
+            IsPlayer = is_Player;
         }
+
+        public (int, int) GetCurrentPosition() => (PositionX, PositionY);
+
     }
 }

@@ -9,7 +9,7 @@ namespace Z2J_104_Checkers
     public class PlayerPawn : Pawn
     {
         public const char PLAYER_PAWN_SYMBOL = 'X';
-        public PlayerPawn(int postionX, int positionY) : base(postionX, positionY,'X', true)
+        public PlayerPawn(int positionX, int positionY) : base(positionX, positionY,'X', true)
         {
 
         }

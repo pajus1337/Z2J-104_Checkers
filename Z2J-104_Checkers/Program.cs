@@ -8,14 +8,15 @@ namespace Z2J_104_Checkers
         {
             MenuView menuView = new MenuView();
             GameManager gameManager = new GameManager(menuView);
-            gameManager.test();
-            Console.ReadKey();
-           
+
+            do
+            {
             int chosenOption = menuView.MainMenuOptionsView();
             switch (chosenOption)
             {
                 case 1:
-                    Console.WriteLine("Option 1");
+                    Console.WriteLine("Start Game");
+                    gameManager.test();
                     break;
                 case 2:
                     Console.WriteLine("Option 2");
@@ -24,6 +25,7 @@ namespace Z2J_104_Checkers
                     Console.WriteLine("def");
                     break;
             }
+            } while (true);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Z2J_104_Checkers
     public class Board
     {
         public readonly char WhiteField;
-        public readonly char BlacKField;
+        public readonly char BlackField;
         public int WidthX { get; private set; }
         public int WidthY { get; private set; }
         public char[,] boardArray { get; set; }
@@ -17,7 +17,7 @@ namespace Z2J_104_Checkers
     public Board()
         {
             WhiteField = '\u2588';
-            BlacKField = '\u2593';
+            BlackField = '\u2593';
             WidthX = 8;
             WidthY = 8;
             boardArray = new char[WidthX, WidthY];

@@ -39,6 +39,7 @@ namespace Z2J_104_Checkers
 
         public int EntryPosition(string selectedAxis)
         {
+         //   Console.WriteLine("Enter the position of the pawn you want to move, eg: a5 or 5b");
             if (selectedAxis == "letters_axis")
             {
                 char userKey;
@@ -56,7 +57,6 @@ namespace Z2J_104_Checkers
 
                 } while (isWrongValue);
                 return resultValue;
-
             }
             else
             {
