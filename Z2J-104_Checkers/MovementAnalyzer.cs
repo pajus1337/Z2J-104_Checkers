@@ -20,7 +20,7 @@ namespace Z2J_104_Checkers
 
             if (isNotTooShort && isNotTooFar && isBlackField)
             {
-                if (isTwoFieldMove && isCaptureOfPawnPossible && isBlackField)
+                if (isTwoFieldMove && isCaptureOfPawnPossible)
                 {
                     return true;
                 }
@@ -50,10 +50,12 @@ namespace Z2J_104_Checkers
             return false;
         }
 
+
+        // Re-work needed.
         private bool IsDistanceNotTooShort(Board board, Pawn pawn, int newPositionY, int newPositionX) 
         {
 
-            if (pawn.IsPlayer & newPositionY - pawn.PositionY == -1 & pawn.PositionX - newPositionX == -1 | pawn.PositionX - newPositionX == +1 )
+            if (pawn.IsPlayer & newPositionY <= pawn.PositionY -1 & pawn.PositionX - newPositionX <= -1 | pawn.PositionX - newPositionX == +1 )
             {
                 return true;
             }
@@ -67,7 +69,7 @@ namespace Z2J_104_Checkers
 
         private bool IsTwoFieldMove(Board board, Pawn pawn, int newPositionY, int newPositionX)
         {
-            if (pawn.PositionY - newPositionY == -2)
+            if (pawn.PositionY - newPositionY == 2)
             {
                 return true;
             }
@@ -93,14 +95,13 @@ namespace Z2J_104_Checkers
         // replace remove of pawn into other class pawncontroller, or req true before execute it
         private bool IsCaptureOfOpponentsPawnPossible(Board board, List<Pawn> pawns, Pawn pawn, int newPositionX, int newPositionY)
         {
-            if (!IsFieldEmpty(board, newPositionX, newPositionY))
+            if (IsFieldEmpty(board, newPositionX, newPositionY))
             {
                 if (pawn.IsPlayer && !pawn.IsSuperPawn)
                 {
 
                     // to refactor 
-                    var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1);
-
+                    var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 &&  p.PositionY == pawn.PositionY -1);
                     if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL)
                     {
                         pawns.Remove(enemyPawn);
