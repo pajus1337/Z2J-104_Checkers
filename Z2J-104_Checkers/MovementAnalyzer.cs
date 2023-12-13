@@ -20,16 +20,16 @@ namespace Z2J_104_Checkers
 
             if (isNotTooShort && isNotTooFar && isBlackField)
             {
-                if (isTwoFieldMove && isCaptureOfPawnPossible)
-                {
-                    return true;
-                }
-                else
+                if (isTwoFieldMove && !isCaptureOfPawnPossible)
                 {
                     return false;
                 }
+                else
+                {
+                    return true;
+                }
             }
-            return true;
+            return false;
         }
 
         private bool IsABlackColorField(Board board, int positionX, int positionY)
@@ -69,7 +69,7 @@ namespace Z2J_104_Checkers
 
         private bool IsTwoFieldMove(Board board, Pawn pawn, int newPositionY, int newPositionX)
         {
-            if (pawn.PositionY - newPositionY == 2)
+            if (Math.Abs(pawn.PositionY - newPositionY) == 2)
             {
                 return true;
             }
@@ -102,7 +102,8 @@ namespace Z2J_104_Checkers
 
                     // to refactor 
                     var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 &&  p.PositionY == pawn.PositionY -1);
-                    if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL)
+
+                    if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX ) == 1 )
                     {
                         pawns.Remove(enemyPawn);
                         return true;
