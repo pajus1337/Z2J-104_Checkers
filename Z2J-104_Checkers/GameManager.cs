@@ -13,6 +13,7 @@ namespace Z2J_104_Checkers
         BoardView boardView;
         private MovementAnalyzer movementAnalyzer;
         MenuView menuView;
+        CPUChoiceAnalyzer cpuChoiceAnalyzer;
 
         public GameManager(MenuView menuView)
         {
@@ -21,12 +22,17 @@ namespace Z2J_104_Checkers
             this.GameBoard = pawnController.PlacePawnsForNewGame(BoardBuilder.CreateNewGameBoard());
             this.boardView = new BoardView();
             this.movementAnalyzer = new MovementAnalyzer();
+            this.cpuChoiceAnalyzer = new CPUChoiceAnalyzer(this.GameBoard, movementAnalyzer, pawnController);
         }
 
         public void test()
         {
             do
             {
+                cpuChoiceAnalyzer.SearchForFrontPawn(GameBoard);
+                Console.ReadKey();
+
+                
                 Console.Clear();
                 boardView.DisplayCurrentBoard(GameBoard);
                 //pawnController.SelectPawn();

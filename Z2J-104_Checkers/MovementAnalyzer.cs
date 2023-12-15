@@ -55,14 +55,25 @@ namespace Z2J_104_Checkers
         private bool IsDistanceNotTooShort(Board board, Pawn pawn, int newPositionY, int newPositionX) 
         {
 
-            if (pawn.IsPlayer & newPositionY <= pawn.PositionY -1 & pawn.PositionX - newPositionX <= -1 | pawn.PositionX - newPositionX == +1 )
+            if (Math.Abs(newPositionY - pawn.PositionY) >= 1 && Math.Abs(newPositionX - pawn.PositionX) >= 1)
             {
                 return true;
             }
+            //if (newPositionY <= pawn.PositionY - 1 & pawn.PositionX - newPositionX <= -1 | pawn.PositionX - newPositionX == +1)
+            //{
+            //    return true;
+            //}
+            return false;
+        }
 
-            else if (!pawn.IsPlayer && pawn.PositionY - newPositionX == 1 && pawn.PositionY - newPositionY == 1)
+        private bool IsDistanceNotTooFar(Board board, Pawn pawn, int newPositionY, int newPositionX)
+        {
+            if (!pawn.IsSuperPawn)
             {
-                return true;
+                if (Math.Abs(pawn.PositionX - newPositionX) <= 2 && Math.Abs(pawn.PositionY - newPositionY) <= 2)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -79,19 +90,6 @@ namespace Z2J_104_Checkers
             }
         }
 
-        private bool IsDistanceNotTooFar(Board board, Pawn pawn, int newPositionY, int newPositionX)
-        {
-            if (pawn.IsPlayer && !pawn.IsSuperPawn)
-            {
-                if (pawn.PositionX - newPositionX  >= -2 && pawn.PositionY - newPositionY >= -2)
-                {
-                    return true;
-                }
-            }
-            return board.boardArray[pawn.PositionY - newPositionY, pawn.PositionX - newPositionX] == board.BlackField && ((pawn.PositionY - newPositionY) == 2);
-        }
-
-
         // replace remove of pawn into other class pawncontroller, or req true before execute it
         private bool IsCaptureOfOpponentsPawnPossible(Board board, List<Pawn> pawns, Pawn pawn, int newPositionX, int newPositionY)
         {
@@ -99,7 +97,6 @@ namespace Z2J_104_Checkers
             {
                 if (pawn.IsPlayer && !pawn.IsSuperPawn)
                 {
-
                     // to refactor 
                     var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 &&  p.PositionY == pawn.PositionY -1);
 
@@ -113,23 +110,23 @@ namespace Z2J_104_Checkers
 
             else if (!pawn.IsPlayer)
             {
-                if (board.boardArray[pawn.PositionX - 1, pawn.PositionY - 1] == PlayerPawn.PLAYER_PAWN_SYMBOL)
+                // to refactor 
+                var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY - 1);
+
+                if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
                 {
-                    pawns.RemoveAll(p => p.PositionX == p.PositionX - 1 && p.PositionY == p.PositionY - 1);
+                    pawns.Remove(enemyPawn);
                     return true;
                 }
-                else if (board.boardArray[pawn.PositionX + 1, pawn.PositionY - 1] == PlayerPawn.PLAYER_PAWN_SYMBOL)
-                {
-                    pawns.RemoveAll(p => p.PositionX == p.PositionX + 1 && p.PositionY == p.PositionY - 1);
-                    return true;
-                }
-            }
-            else
-            {
-                return false;
             }
             return false;
         }     
+
+        public bool MovementInRightDirection()
+        {
+
+            return true;
+        }
     }
 }
 
