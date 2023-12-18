@@ -29,9 +29,9 @@ namespace Z2J_104_Checkers
         {
             do
             {
-                cpuChoiceAnalyzer.SearchForFrontPawn(GameBoard);
+                cpuChoiceAnalyzer.TestOfMovementLogik();
+                //cpuChoiceAnalyzer.SearchForFrontPawn(GameBoard);
                 Console.ReadKey();
-
                 
                 Console.Clear();
                 boardView.DisplayCurrentBoard(GameBoard);

@@ -112,10 +112,6 @@
             }
         }
 
-        public void UpdatePawnPosition(Pawn pawn ,int positionX, int PositionY)
-        {
-
-        }
         public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y) ;
 
         public Board GetBoard() => gameManager.GetBoard();
