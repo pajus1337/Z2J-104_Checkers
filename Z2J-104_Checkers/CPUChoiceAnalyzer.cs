@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
@@ -14,6 +15,7 @@ namespace Z2J_104_Checkers
         Board board;
         PawnController pawnController;
 
+        private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
         private int newPositionY;
 
@@ -26,12 +28,9 @@ namespace Z2J_104_Checkers
 
         public void TestOfMovementLogik()
         {
-            var pawnToAction = SearchForFrontPawn(board);
-            CheckPossibilityOfMove(pawnToAction);
-            if (!movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, pawnToAction, newPositionY, newPositionX))
-            {
-                TryOneFieldMove();
-            }
+           pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
+           FindBestPawnForAction();
+          
 
         }
 
@@ -45,11 +44,11 @@ namespace Z2J_104_Checkers
         /// </returns>
         public CpuPawn SearchForFrontPawn(Board board)
         {
-            for (int y = board.WidthY-1; y > 0; y--)
+            for (int y = board.WidthY - 1; y > 0; y--)
             {
                 for (int x = 0; x < board.WidthX; x++)
                 {
-                    if (board.boardArray[y,x] == CpuPawn.CPU_PAWN_SYMBOL)
+                    if (board.boardArray[y, x] == CpuPawn.CPU_PAWN_SYMBOL)
                     {
                         var pawn = pawnController.PawnsInGame.OfType<CpuPawn>().FirstOrDefault(p => p.PositionX == x && p.PositionY == y);
                         if (pawn != null)
@@ -62,7 +61,7 @@ namespace Z2J_104_Checkers
             return null;
         }
 
-        private (int newPostionX,int newPostionY) TrySetNewPositionForPawn(CpuPawn cpuPawn)
+        private (int newPostionX, int newPostionY) TrySetNewPositionForTwoFieldMove(CpuPawn cpuPawn)
         {
             int newPositionY = -1;
             int newPositionX = -1;
@@ -70,7 +69,7 @@ namespace Z2J_104_Checkers
             if (cpuPawn.PositionY + 2 < board.WidthY)
             {
                 newPositionY = cpuPawn.PositionY + 2;
-                if (cpuPawn.PositionX - 2 < 0)
+                if (cpuPawn.PositionX - 2 >= 0)
                 {
                     newPositionX = cpuPawn.PositionX - 2;
                 }
@@ -86,13 +85,40 @@ namespace Z2J_104_Checkers
         {
             if (cpuPawn != null && !cpuPawn.IsSuperPawn)
             {
-                (newPositionX, newPositionY) = TrySetNewPositionForPawn(cpuPawn);
+                (newPositionX, newPositionY) = TrySetNewPositionForTwoFieldMove(cpuPawn);
             }
         }
 
-        private void SearchForEnemyPawn(CpuPawn cpuPawn, Board board)
+        private List<CpuPawn> FindPawnsWithNearbyOpponentPawns(PawnController pawnController)
         {
+            var cpuPawnsWithAction = pawnController.PawnsInGame
+                .OfType<CpuPawn>()
+                .Where(cpuPawn => pawnController.PawnsInGame
+                    .OfType<PlayerPawn>()
+                    .Any(playerPawn => !ReferenceEquals(cpuPawn, playerPawn) &&
+                                       Math.Abs(cpuPawn.PositionX - playerPawn.PositionX) == 1 &&
+                                       Math.Abs(cpuPawn.PositionY - playerPawn.PositionY) == 1))
+                .ToList();
 
+            return cpuPawnsWithAction;
+        }
+
+        private void FindBestPawnForAction()
+        {
+            foreach (var pawn in pawnsWithAction)
+            {
+                (int newY,int newX) = TrySetNewPositionForTwoFieldMove(pawn);
+                if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, pawn, newX, newY))
+                {
+                    Debug.Print("YES");
+                }
+            }
+        }
+
+        private bool isAttackPossible(CpuPawn cpuPawn)
+        {
+            TrySetNewPositionForTwoFieldMove(cpuPawn);
+            return true;
         }
     }
 }

@@ -32,7 +32,7 @@
             }
 
             //TEST TO REMOVE !! ! ! ! ! ! ! ! !
-            var dummyPawn = new CpuPawn(3,4);
+            var dummyPawn = new PlayerPawn(2,3);
             PawnsInGame.Add(dummyPawn);
             board.boardArray[dummyPawn.PositionY,dummyPawn.PositionX] = dummyPawn.PawnSymbol;
             /// END 
