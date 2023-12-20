@@ -98,25 +98,25 @@ namespace Z2J_104_Checkers
                 if (pawn.IsPlayer && !pawn.IsSuperPawn)
                 {
                     // to refactor 
-                    var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 &&  p.PositionY == pawn.PositionY -1);
+                    var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY - 1);
 
-                    if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX ) == 1 )
+                    if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
                     {
                         pawns.Remove(enemyPawn);
                         return true;
                     }
                 }
-            }
 
-            else if (!pawn.IsPlayer)
-            {
-                // to refactor 
-                var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY - 1);
-
-                if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
+                else if (!pawn.IsPlayer)
                 {
-                    pawns.Remove(enemyPawn);
-                    return true;
+                    // to refactor 
+                    var enemyPawn = pawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY + 1);
+
+                    if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
+                    {
+                        pawns.Remove(enemyPawn);
+                        return true;
+                    }
                 }
             }
             return false;

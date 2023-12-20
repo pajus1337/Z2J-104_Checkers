@@ -111,6 +111,7 @@ namespace Z2J_104_Checkers
                 if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, pawn, newX, newY))
                 {
                     Debug.Print("YES");
+                    return;
                 }
             }
         }
