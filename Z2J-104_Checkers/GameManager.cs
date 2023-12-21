@@ -10,6 +10,7 @@ namespace Z2J_104_Checkers
     {
         PawnController pawnController;
         public Board GameBoard { get; private set; }
+
         BoardView boardView;
         private MovementAnalyzer movementAnalyzer;
         MenuView menuView;
@@ -34,10 +35,14 @@ namespace Z2J_104_Checkers
                 Console.ReadKey();
                 
                 Console.Clear();
+                BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
+                boardView.DisplayCurrentBoard(GameBoard);
+                cpuChoiceAnalyzer.TestOfMovementLogik();
+                BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
                 boardView.DisplayCurrentBoard(GameBoard);
                 //pawnController.SelectPawn();
                 //pawnController.SelectNewPawnPosition();
-                pawnController.MovePawn();
+                pawnController.MovePlayerPawn();
                 BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
                 boardView.DisplayCurrentBoard(GameBoard);
                 Console.ReadKey();

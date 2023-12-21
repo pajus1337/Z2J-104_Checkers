@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -28,9 +29,9 @@ namespace Z2J_104_Checkers
 
         public void TestOfMovementLogik()
         {
-           pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
-           FindBestPawnForAction();
-          
+            pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
+            FindBestPawnForActionAndSetAction();
+
 
         }
 
@@ -81,6 +82,26 @@ namespace Z2J_104_Checkers
             return (newPositionX, newPositionY);
         }
 
+        private (int newPostionX, int newPostionY) TrySetNewPositionForOneFieldMove(CpuPawn cpuPawn)
+        {
+            int newPositionY = -1;
+            int newPositionX = -1;
+
+            if (cpuPawn.PositionY + 1 < board.WidthY)
+            {
+                newPositionY = cpuPawn.PositionY + 1;
+                if (cpuPawn.PositionX - 1 > 0)
+                {
+                    newPositionX = cpuPawn.PositionX - 1;
+                }
+                else if (cpuPawn.PositionX + 1 < board.WidthX)
+                {
+                    newPositionX = cpuPawn.PositionX + 1;
+                }
+            }
+            return (newPositionX, newPositionY);
+        }
+
         private void CheckPossibilityOfMove(CpuPawn cpuPawn)
         {
             if (cpuPawn != null && !cpuPawn.IsSuperPawn)
@@ -103,16 +124,34 @@ namespace Z2J_104_Checkers
             return cpuPawnsWithAction;
         }
 
-        private void FindBestPawnForAction()
+        private void FindBestPawnForActionAndSetAction()
         {
+            if (pawnsWithAction.Count == 0)
+            {
+                TryToMoveWithoutAction();
+                return;
+            }
+
             foreach (var pawn in pawnsWithAction)
             {
-                (int newY,int newX) = TrySetNewPositionForTwoFieldMove(pawn);
-                if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, pawn, newX, newY))
+                (int newPositionX, int newPositionY) = TrySetNewPositionForTwoFieldMove(pawn);
+                if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, pawn, newPositionY, newPositionX))
                 {
+                    pawnController.MoveCpuPawn(pawn, newPositionX, newPositionY);
                     Debug.Print("YES");
                     return;
                 }
+            }
+        }
+
+        public void TryToMoveWithoutAction()
+        {
+            CpuPawn cpuPawn = SearchForFrontPawn(board);
+            (newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);
+            if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, cpuPawn, newPositionY, newPositionX))
+            {
+                pawnController.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
+                return;
             }
         }
 

@@ -1,4 +1,6 @@
-﻿namespace Z2J_104_Checkers
+﻿using System.ComponentModel;
+
+namespace Z2J_104_Checkers
 {
     public class PawnController : IGameManager
     {
@@ -32,9 +34,9 @@
             }
 
             //TEST TO REMOVE !! ! ! ! ! ! ! ! !
-            var dummyPawn = new PlayerPawn(2,3);
-            PawnsInGame.Add(dummyPawn);
-            board.boardArray[dummyPawn.PositionY,dummyPawn.PositionX] = dummyPawn.PawnSymbol;
+            //var dummyPawn = new PlayerPawn(2,3);
+            //PawnsInGame.Add(dummyPawn);
+            //board.boardArray[dummyPawn.PositionY,dummyPawn.PositionX] = dummyPawn.PawnSymbol;
             /// END 
             /// 
 
@@ -90,14 +92,14 @@
             return (digits_axis, letters_axis);
         }
         
-        public void MovePawn()
+        public void MovePlayerPawn()
         {
             int newPositionY;
             int newPositionX;
             var gameBoard = GetBoard();
             var SelectedPawn = SelectPawn();
             var movementAnalyzer = GetMovementAnalyzer();
-
+           
             (newPositionY, newPositionX) = SelectNewPawnPosition();
 
 
@@ -111,6 +113,14 @@
                 menuView.MoveFailed();
             }
         }
+
+    public void MoveCpuPawn(CpuPawn cpuPawnInAction, int newPositionX, int newPositionY)
+        {
+            cpuPawnInAction.PositionX = newPositionX;
+            cpuPawnInAction.PositionY = newPositionY;
+        }
+
+
 
         public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y) ;
 
