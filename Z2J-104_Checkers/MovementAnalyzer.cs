@@ -12,11 +12,11 @@ namespace Z2J_104_Checkers
     {
         public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
         {
+            bool isNotTooShort = IsDistanceNotTooShort(board, pawn, newPositionY, newPositionX);
             bool isBlackField = IsABlackColorField(board, newPositionX, newPositionY);
             bool isNotTooFar = IsDistanceNotTooFar(board, pawn, newPositionY, newPositionX);
             bool isTwoFieldMove = IsTwoFieldMove(board, pawn, newPositionY, newPositionX);
             bool isCaptureOfPawnPossible = IsCaptureOfOpponentsPawnPossible(board, listOfPawns, pawn, newPositionX, newPositionY);
-            bool isNotTooShort = IsDistanceNotTooShort(board, pawn, newPositionY, newPositionX);
 
             if (isNotTooShort && isNotTooFar && isBlackField)
             {
@@ -50,19 +50,13 @@ namespace Z2J_104_Checkers
             return false;
         }
 
-
         // Re-work needed.
         private bool IsDistanceNotTooShort(Board board, Pawn pawn, int newPositionY, int newPositionX) 
         {
-
             if (Math.Abs(newPositionY - pawn.PositionY) >= 1 && Math.Abs(newPositionX - pawn.PositionX) >= 1)
             {
                 return true;
             }
-            //if (newPositionY <= pawn.PositionY - 1 & pawn.PositionX - newPositionX <= -1 | pawn.PositionX - newPositionX == +1)
-            //{
-            //    return true;
-            //}
             return false;
         }
 
@@ -121,12 +115,6 @@ namespace Z2J_104_Checkers
             }
             return false;
         }     
-
-        public bool MovementInRightDirection()
-        {
-
-            return true;
-        }
     }
 }
 

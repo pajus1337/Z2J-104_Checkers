@@ -16,6 +16,8 @@ namespace Z2J_104_Checkers
         MenuView menuView;
         CPUChoiceAnalyzer cpuChoiceAnalyzer;
 
+
+
         public GameManager(MenuView menuView)
         {
             this.menuView = menuView;
@@ -26,32 +28,67 @@ namespace Z2J_104_Checkers
             this.cpuChoiceAnalyzer = new CPUChoiceAnalyzer(this.GameBoard, movementAnalyzer, pawnController);
         }
 
+
         public void test()
         {
             do
             {
-                cpuChoiceAnalyzer.TestOfMovementLogik();
-                //cpuChoiceAnalyzer.SearchForFrontPawn(GameBoard);
-                Console.ReadKey();
-                
+                SetupTurnHandlers();
+                //cpuChoiceAnalyzer.TestOfMovementLogik();
+                ////cpuChoiceAnalyzer.SearchForFrontPawn(GameBoard);
+                //Console.ReadKey();
+
                 Console.Clear();
                 BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
                 boardView.DisplayCurrentBoard(GameBoard);
-                cpuChoiceAnalyzer.TestOfMovementLogik();
-                BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
-                boardView.DisplayCurrentBoard(GameBoard);
-                //pawnController.SelectPawn();
-                //pawnController.SelectNewPawnPosition();
                 pawnController.MovePlayerPawn();
-                BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
-                boardView.DisplayCurrentBoard(GameBoard);
                 Console.ReadKey();
-            } while (true);
 
+            } while (true);
         }
 
         public Board GetBoard() => this.GameBoard;
 
         public MovementAnalyzer GetMovementAnalyzer() => this.movementAnalyzer;
+
+        public void SetupTurnHandlers()
+        {
+            PlayerTurn += OnTurnChanged;
+            PlayerTurn += PlayerTurnStart;
+
+            CPUTurn += CPUTurnStart;
+            CPUTurn += OnTurnChanged;
+        }
+
+        public delegate void PlayerTurnHandler();
+        public delegate void CPUTurnHandler();
+        public event PlayerTurnHandler PlayerTurn;
+        public event CPUTurnHandler CPUTurn;
+
+        public void OnTurnChanged()
+        {
+            Console.Clear();
+            BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
+            boardView.DisplayCurrentBoard(GameBoard);
+        }
+
+        public void PlayerTurnStart()
+        {
+            pawnController.MovePlayerPawn();
+        }
+
+        public void CPUTurnStart()
+        {
+            Console.WriteLine("CPU TURN START");
+        }
+        public void CPUTurnEnd()
+        {
+            PlayerTurn?.Invoke();
+        }
+
+        public void PlayerTurnEnd()
+        {
+            CPUTurn?.Invoke();
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace Z2J_104_Checkers
         MovementAnalyzer movementAnalyzer;
         Board board;
         PawnController pawnController;
-
         private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
         private int newPositionY;
@@ -31,8 +30,6 @@ namespace Z2J_104_Checkers
         {
             pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
             FindBestPawnForActionAndSetAction();
-
-
         }
 
         /// <summary>
@@ -102,14 +99,6 @@ namespace Z2J_104_Checkers
             return (newPositionX, newPositionY);
         }
 
-        private void CheckPossibilityOfMove(CpuPawn cpuPawn)
-        {
-            if (cpuPawn != null && !cpuPawn.IsSuperPawn)
-            {
-                (newPositionX, newPositionY) = TrySetNewPositionForTwoFieldMove(cpuPawn);
-            }
-        }
-
         private List<CpuPawn> FindPawnsWithNearbyOpponentPawns(PawnController pawnController)
         {
             var cpuPawnsWithAction = pawnController.PawnsInGame
@@ -153,12 +142,6 @@ namespace Z2J_104_Checkers
                 pawnController.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
                 return;
             }
-        }
-
-        private bool isAttackPossible(CpuPawn cpuPawn)
-        {
-            TrySetNewPositionForTwoFieldMove(cpuPawn);
-            return true;
         }
     }
 }
