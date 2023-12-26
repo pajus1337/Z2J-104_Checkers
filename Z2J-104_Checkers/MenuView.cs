@@ -96,5 +96,11 @@ namespace Z2J_104_Checkers
         {
             Console.WriteLine("An impossible move was made");
         }
+
+        public void Gameover()
+        {
+            Console.WriteLine("End of the game with a result");
+            Console.WriteLine($"{}");
+        }
     }
 }

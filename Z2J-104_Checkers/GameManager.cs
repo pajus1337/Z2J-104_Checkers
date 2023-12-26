@@ -15,6 +15,10 @@ namespace Z2J_104_Checkers
         private MovementAnalyzer movementAnalyzer;
         MenuView menuView;
         CPUChoiceAnalyzer cpuChoiceAnalyzer;
+        public bool IsGameOver { get; private set; }
+        private readonly bool _isGameOver = false;
+        public int PlayerScore { get; set; } = 0;
+        public int CPUScore { get; set; } = 0;
 
 
 
@@ -34,17 +38,9 @@ namespace Z2J_104_Checkers
             do
             {
                 SetupTurnHandlers();
-                //cpuChoiceAnalyzer.TestOfMovementLogik();
-                ////cpuChoiceAnalyzer.SearchForFrontPawn(GameBoard);
-                //Console.ReadKey();
+                PlayerTurn();
 
-                Console.Clear();
-                BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
-                boardView.DisplayCurrentBoard(GameBoard);
-                pawnController.MovePlayerPawn();
-                Console.ReadKey();
-
-            } while (true);
+            } while (!IsGameOver);
         }
 
         public Board GetBoard() => this.GameBoard;
@@ -67,13 +63,23 @@ namespace Z2J_104_Checkers
 
         public void OnTurnChanged()
         {
-            Console.Clear();
-            BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
-            boardView.DisplayCurrentBoard(GameBoard);
+            if (!IsGameOver)
+            {
+                Console.Clear();
+                BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
+                boardView.DisplayCurrentBoard(GameBoard);
+            }
+            else
+            {
+                Console.WriteLine("Game Over");
+            }
         }
 
         public void PlayerTurnStart()
         {
+            Console.Clear();
+            BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
+            boardView.DisplayCurrentBoard(GameBoard);
             pawnController.MovePlayerPawn();
         }
 
@@ -90,5 +96,12 @@ namespace Z2J_104_Checkers
         {
             CPUTurn?.Invoke();
         }
+
+        public bool isGameOver(bool isGameOver=false)
+        {
+            IsGameOver = isGameOver;
+            return isGameOver;
+        }
+        
     }
 }
