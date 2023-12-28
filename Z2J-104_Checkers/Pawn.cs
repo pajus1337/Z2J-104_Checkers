@@ -22,8 +22,5 @@ namespace Z2J_104_Checkers
             PawnSymbol = pawnSymbol;
             IsPlayer = is_Player;
         }
-
-        public (int, int) GetCurrentPosition() => (PositionX, PositionY);
-
     }
 }

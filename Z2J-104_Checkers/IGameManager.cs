@@ -10,5 +10,7 @@ namespace Z2J_104_Checkers
     {
         public Board GetBoard();
         public MovementAnalyzer GetMovementAnalyzer();
+
+        public void TurnEnds();
     }
 }

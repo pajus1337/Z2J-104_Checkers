@@ -10,8 +10,10 @@ namespace Z2J_104_Checkers
 {
     public class MovementAnalyzer
     {
-        public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
+        public bool IsEnemyPawnCapturedOnLastMove { get; set; }
+            public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
         {
+            IsEnemyPawnCapturedOnLastMove = false;
             bool isNotTooShort = IsDistanceNotTooShort(board, pawn, newPositionY, newPositionX);
             bool isBlackField = IsABlackColorField(board, newPositionX, newPositionY);
             bool isNotTooFar = IsDistanceNotTooFar(board, pawn, newPositionY, newPositionX);
@@ -97,6 +99,7 @@ namespace Z2J_104_Checkers
                     if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
                     {
                         pawns.Remove(enemyPawn);
+                        IsEnemyPawnCapturedOnLastMove = true;
                         return true;
                     }
                 }
@@ -109,6 +112,7 @@ namespace Z2J_104_Checkers
                     if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
                     {
                         pawns.Remove(enemyPawn);
+                        IsEnemyPawnCapturedOnLastMove = true;
                         return true;
                     }
                 }

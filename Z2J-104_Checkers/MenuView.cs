@@ -100,7 +100,7 @@ namespace Z2J_104_Checkers
         public void Gameover()
         {
             Console.WriteLine("End of the game with a result");
-            Console.WriteLine($"Player Score :{}\n\rCPU Score: {}");
+            Console.WriteLine($"Player Score : \n\rCPU Score: ");
         }
     }
 }

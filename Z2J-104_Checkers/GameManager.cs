@@ -8,6 +8,9 @@ namespace Z2J_104_Checkers
 {
     public class GameManager : IGameManager
     {
+        public enum Turn { Player, CPU }
+        private Turn currentTurn;
+
         PawnController pawnController;
         public Board GameBoard { get; private set; }
 
@@ -32,12 +35,12 @@ namespace Z2J_104_Checkers
             this.cpuChoiceAnalyzer = new CPUChoiceAnalyzer(this.GameBoard, movementAnalyzer, pawnController);
         }
 
-
         public void test()
         {
             do
             {
                 SetupTurnHandlers();
+                currentTurn = Turn.Player;
                 PlayerTurn();
 
             } while (!IsGameOver);
@@ -46,6 +49,20 @@ namespace Z2J_104_Checkers
         public Board GetBoard() => this.GameBoard;
 
         public MovementAnalyzer GetMovementAnalyzer() => this.movementAnalyzer;
+
+        public void TurnEnds()
+        {
+            if (currentTurn == Turn.Player)
+            {
+                currentTurn = Turn.CPU;
+                CPUTurn?.Invoke();
+            }
+            else
+            {
+                currentTurn = Turn.Player;
+                PlayerTurn?.Invoke();
+            }
+        }
 
         public void SetupTurnHandlers()
         {
@@ -85,6 +102,7 @@ namespace Z2J_104_Checkers
 
         public void CPUTurnStart()
         {
+            cpuChoiceAnalyzer.PickAndMoveCPUPawn();
             Console.WriteLine("CPU TURN START");
         }
         public void CPUTurnEnd()
@@ -97,11 +115,11 @@ namespace Z2J_104_Checkers
             CPUTurn?.Invoke();
         }
 
-        public bool isGameOver(bool isGameOver=false)
+        public bool isGameOver(bool isGameOver = false)
         {
             IsGameOver = isGameOver;
             return isGameOver;
         }
-        
+
     }
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace Z2J_104_Checkers
 {
@@ -26,7 +18,7 @@ namespace Z2J_104_Checkers
             this.board = board;
         }
 
-        public void TestOfMovementLogik()
+        public void PickAndMoveCPUPawn()
         {
             pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
             FindBestPawnForActionAndSetAction();

@@ -68,8 +68,8 @@ namespace Z2J_104_Checkers
         {
             menuView.SelectPawnToMove();
 
-            int letters_axis = menuView.EntryPosition(nameof(letters_axis)); 
-            int digits_axis = menuView.EntryPosition(nameof(digits_axis)); 
+            int letters_axis = menuView.EntryPosition(nameof(letters_axis));
+            int digits_axis = menuView.EntryPosition(nameof(digits_axis));
 
             Pawn? selectedPawn = PawnsInGame.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
             if (selectedPawn == null)
@@ -91,7 +91,7 @@ namespace Z2J_104_Checkers
 
             return (digits_axis, letters_axis);
         }
-        
+
         public void MovePlayerPawn()
         {
             int newPositionY;
@@ -99,14 +99,18 @@ namespace Z2J_104_Checkers
             var gameBoard = GetBoard();
             var SelectedPawn = SelectPawn();
             var movementAnalyzer = GetMovementAnalyzer();
-           
+
             (newPositionY, newPositionX) = SelectNewPawnPosition();
 
 
-            if (movementAnalyzer.IsAllowedMovement(gameBoard,PawnsInGame, SelectedPawn, newPositionY, newPositionX))
+            if (movementAnalyzer.IsAllowedMovement(gameBoard, PawnsInGame, SelectedPawn, newPositionY, newPositionX))
             {
                 SelectedPawn.PositionX = newPositionX;
                 SelectedPawn.PositionY = newPositionY;
+                if (!movementAnalyzer.IsEnemyPawnCapturedOnLastMove)
+                {
+                    gameManager.TurnEnds();
+                }
             }
             else
             {
@@ -114,19 +118,26 @@ namespace Z2J_104_Checkers
             }
         }
 
-    public void MoveCpuPawn(CpuPawn cpuPawnInAction, int newPositionX, int newPositionY)
+        public void MoveCpuPawn(CpuPawn cpuPawnInAction, int newPositionX, int newPositionY)
         {
+            var movementAnalyzer = GetMovementAnalyzer();
             cpuPawnInAction.PositionX = newPositionX;
             cpuPawnInAction.PositionY = newPositionY;
+            
+            if (!movementAnalyzer.IsEnemyPawnCapturedOnLastMove)
+            {
+                gameManager.TurnEnds();
+            }
         }
 
-
-
-        public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y) ;
+        public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y);
 
         public Board GetBoard() => gameManager.GetBoard();
 
         public MovementAnalyzer GetMovementAnalyzer() => gameManager.GetMovementAnalyzer();
+        public void TurnEnds()
+        {
+        }
     }
 }
 
