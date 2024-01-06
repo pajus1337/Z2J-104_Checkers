@@ -74,7 +74,8 @@ namespace Z2J_104_Checkers
             Pawn? selectedPawn = PawnsInGame.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
             if (selectedPawn == null)
             {
-                menuView.WrongPawnChoice();
+                MenuView.WrongPawnChoice();
+                return null;
             }
             return selectedPawn;
         }

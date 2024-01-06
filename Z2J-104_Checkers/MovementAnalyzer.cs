@@ -13,6 +13,11 @@ namespace Z2J_104_Checkers
         public bool IsEnemyPawnCapturedOnLastMove { get; set; }
             public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
         {
+            if (pawn == null)
+            {
+                MenuView.WrongPawnChoice();
+                return false;
+            }
             IsEnemyPawnCapturedOnLastMove = false;
             bool isNotTooShort = IsDistanceNotTooShort(board, pawn, newPositionY, newPositionX);
             bool isBlackField = IsABlackColorField(board, newPositionX, newPositionY);

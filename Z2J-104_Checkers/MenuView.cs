@@ -87,7 +87,7 @@ namespace Z2J_104_Checkers
             Console.WriteLine($"Specify the new position for the pawn to be moved.");
         }
 
-        public void WrongPawnChoice()
+        public static void WrongPawnChoice()
         {
             Console.WriteLine("There is no pawn under this position.");
         }
