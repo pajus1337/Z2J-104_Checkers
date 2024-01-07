@@ -37,13 +37,24 @@ namespace Z2J_104_Checkers
 
         public void test()
         {
+            Initialize();
             do
             {
-                SetupTurnHandlers();
-                currentTurn = Turn.Player;
-                PlayerTurn();
+
 
             } while (!IsGameOver);
+        }
+
+        public void CheckGameStatus()
+        {
+
+        }
+
+        public void Initialize()
+        {
+            SetupTurnHandlers();
+            currentTurn = Turn.Player;
+            PlayerTurn();
         }
 
         public Board GetBoard() => this.GameBoard;
@@ -69,8 +80,8 @@ namespace Z2J_104_Checkers
             PlayerTurn += OnTurnChanged;
             PlayerTurn += PlayerTurnStart;
 
-            CPUTurn += CPUTurnStart;
             CPUTurn += OnTurnChanged;
+            CPUTurn += CPUTurnStart;
         }
 
         public delegate void PlayerTurnHandler();
@@ -94,9 +105,6 @@ namespace Z2J_104_Checkers
 
         public void PlayerTurnStart()
         {
-            Console.Clear();
-            BoardBuilder.UpdateBoardState(GameBoard, pawnController.PawnsInGame);
-            boardView.DisplayCurrentBoard(GameBoard);
             pawnController.MovePlayerPawn();
         }
 
@@ -104,6 +112,7 @@ namespace Z2J_104_Checkers
         {
             cpuChoiceAnalyzer.PickAndMoveCPUPawn();
             Console.WriteLine("CPU TURN START");
+            TurnEnds();
         }
         public void CPUTurnEnd()
         {

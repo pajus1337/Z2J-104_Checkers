@@ -131,6 +131,11 @@ namespace Z2J_104_Checkers
             }
         }
 
+        public void RemovePawn(Pawn pawn)
+        {
+            PawnsInGame.Remove(pawn);
+        }
+
         public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y);
 
         public Board GetBoard() => gameManager.GetBoard();
