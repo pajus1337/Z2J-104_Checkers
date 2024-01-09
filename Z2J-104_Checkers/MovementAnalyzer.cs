@@ -11,7 +11,7 @@ namespace Z2J_104_Checkers
     public class MovementAnalyzer
     {
         public bool IsEnemyPawnCapturedOnLastMove { get; set; }
-            public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
+        public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
         {
             if (pawn == null)
             {
@@ -58,7 +58,7 @@ namespace Z2J_104_Checkers
         }
 
         // Re-work needed.
-        private bool IsDistanceNotTooShort(Board board, Pawn pawn, int newPositionY, int newPositionX) 
+        private bool IsDistanceNotTooShort(Board board, Pawn pawn, int newPositionY, int newPositionX)
         {
             if (Math.Abs(newPositionY - pawn.PositionY) >= 1 && Math.Abs(newPositionX - pawn.PositionX) >= 1)
             {
@@ -123,7 +123,7 @@ namespace Z2J_104_Checkers
                 }
             }
             return false;
-        }     
+        }
     }
 }
 
