@@ -131,9 +131,9 @@ namespace Z2J_104_Checkers
             }
         }
 
-        public void CaptureEnemyPawn()
+        public void RemovePawn(Pawn pawn)
         {
-
+            PawnsInGame.Remove(pawn);
         }
 
         public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y);
