@@ -66,18 +66,27 @@ namespace Z2J_104_Checkers
 
         public Pawn SelectPawn()
         {
-            menuView.SelectPawnToMove();
+            Pawn? pawn;
 
-            int letters_axis = menuView.EntryPosition(nameof(letters_axis));
-            int digits_axis = menuView.EntryPosition(nameof(digits_axis));
-
-            Pawn? selectedPawn = PawnsInGame.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
-            if (selectedPawn == null)
+            do
             {
+
+                menuView.SelectPawnToMove();
+
+                int letters_axis = menuView.EntryPosition(nameof(letters_axis));
+                int digits_axis = menuView.EntryPosition(nameof(digits_axis));
+
+                Pawn? selectedPawn = PawnsInGame.FirstOrDefault(p => p.PositionX == letters_axis && p.PositionY == digits_axis);
+
+                if (selectedPawn != null)
+                {
+                    return selectedPawn;
+                }
+                pawn = selectedPawn;
                 MenuView.WrongPawnChoice();
-                return null;
-            }
-            return selectedPawn;
+
+            } while (pawn == null);
+            return pawn;
         }
 
         public (int, int) SelectNewPawnPosition()

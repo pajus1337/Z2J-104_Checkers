@@ -4,12 +4,14 @@ namespace Z2J_104_Checkers
 {
     public class CPUChoiceAnalyzer
     {
+
         MovementAnalyzer movementAnalyzer;
         Board board;
         PawnController pawnController;
         private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
         private int newPositionY;
+        private int counterOfFailMove = 0;
 
         public CPUChoiceAnalyzer(Board board, MovementAnalyzer movementAnalyzer, PawnController pawnController)
         {
@@ -20,8 +22,13 @@ namespace Z2J_104_Checkers
 
         public void PickAndMoveCPUPawn()
         {
+            bool isMovementAccomplished = false;
             pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
-            FindBestPawnForActionAndSetAction();
+
+            do
+            {
+                isMovementAccomplished = IsPawnSetActionCompleted();
+            } while (!isMovementAccomplished || (isMovementAccomplished && movementAnalyzer.IsEnemyPawnCapturedOnLastMove));
         }
 
         /// <summary>
@@ -105,12 +112,14 @@ namespace Z2J_104_Checkers
             return cpuPawnsWithAction;
         }
 
-        private void FindBestPawnForActionAndSetAction()
+        private bool IsPawnSetActionCompleted()
         {
-            if (pawnsWithAction.Count == 0)
+
+            if (pawnsWithAction.Count == 0 || counterOfFailMove == pawnsWithAction.Count * 2)
             {
                 TryToMoveWithoutAction();
-                return;
+                counterOfFailMove = 0;
+                return true;
             }
 
             foreach (var pawn in pawnsWithAction)
@@ -120,12 +129,16 @@ namespace Z2J_104_Checkers
                 {
                     pawnController.MoveCpuPawn(pawn, newPositionX, newPositionY);
                     Debug.Print("YES");
-                    return;
+                    counterOfFailMove = 0;
+                    return true;
                 }
+                counterOfFailMove++;
             }
+            
+            return false;
         }
 
-        public void TryToMoveWithoutAction()
+        private void TryToMoveWithoutAction()
         {
             CpuPawn cpuPawn = SearchForFrontPawn(board);
             (newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);

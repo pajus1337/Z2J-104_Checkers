@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,8 +111,8 @@ namespace Z2J_104_Checkers
 
         public void CPUTurnStart()
         {
+            Debug.Print("CPU TURN START");
             cpuChoiceAnalyzer.PickAndMoveCPUPawn();
-            Console.WriteLine("CPU TURN START");
             TurnEnds();
         }
         public void CPUTurnEnd()
