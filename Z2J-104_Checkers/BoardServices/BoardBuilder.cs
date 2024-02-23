@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Z2J_104_Checkers
+namespace Z2J_104_Checkers.BoardServices
 {
     public class BoardBuilder
     {
@@ -61,7 +61,7 @@ namespace Z2J_104_Checkers
             {
                 for (int x = 0; x < board.WidthX; x++)
                 {
-                    
+
                     {
                         if (y % 2 == 0)
                         {

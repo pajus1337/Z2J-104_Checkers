@@ -1,34 +1,36 @@
 ﻿using System.Diagnostics;
+using Z2J_104_Checkers.BoardServices;
+using Z2J_104_Checkers.Interfaces;
 
 namespace Z2J_104_Checkers
 {
-    public class CPUChoiceAnalyzer
+    public class CPUChoiceAnalyzer : ICPUChoiceAnalyzer
     {
 
-        MovementAnalyzer movementAnalyzer;
+        private readonly IMovementAnalyzer _movementAnalyzer;
         Board board;
-        PawnController pawnController;
+        private readonly IPawnController _pawnController;
         private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
         private int newPositionY;
         private int counterOfFailMove = 0;
 
-        public CPUChoiceAnalyzer(Board board, MovementAnalyzer movementAnalyzer, PawnController pawnController)
+        public CPUChoiceAnalyzer(Board board, IMovementAnalyzer movementAnalyzer, IPawnController pawnController)
         {
-            this.pawnController = pawnController;
-            this.movementAnalyzer = movementAnalyzer;
+            this._pawnController = pawnController;
+            this._movementAnalyzer = movementAnalyzer;
             this.board = board;
         }
 
         public void PickAndMoveCPUPawn()
         {
             bool isMovementAccomplished = false;
-            pawnsWithAction = FindPawnsWithNearbyOpponentPawns(pawnController);
+            pawnsWithAction = FindPawnsWithNearbyOpponentPawns();
 
             do
             {
                 isMovementAccomplished = IsPawnSetActionCompleted();
-            } while (!isMovementAccomplished || (isMovementAccomplished && movementAnalyzer.IsEnemyPawnCapturedOnLastMove));
+            } while (!isMovementAccomplished || (isMovementAccomplished && _movementAnalyzer.IsEnemyPawnCapturedOnLastMove));
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace Z2J_104_Checkers
         /// A <see cref="CpuPawn"/> object representing the front cpu pawn.
         /// May return null if a suitable pawn is not found !
         /// </returns>
-        public CpuPawn SearchForFrontPawn(Board board)
+        private CpuPawn SearchForFrontPawn(Board board)
         {
             for (int y = board.WidthY - 1; y > 0; y--)
             {
@@ -47,7 +49,7 @@ namespace Z2J_104_Checkers
                 {
                     if (board.boardArray[y, x] == CpuPawn.CPU_PAWN_SYMBOL)
                     {
-                        var pawn = pawnController.PawnsInGame.OfType<CpuPawn>().FirstOrDefault(p => p.PositionX == x && p.PositionY == y);
+                        var pawn = _pawnController.PawnsInGame.OfType<CpuPawn>().FirstOrDefault(p => p.PositionX == x && p.PositionY == y);
                         if (pawn != null)
                         {
                             return pawn;
@@ -98,15 +100,15 @@ namespace Z2J_104_Checkers
             return (newPositionX, newPositionY);
         }
 
-        private List<CpuPawn> FindPawnsWithNearbyOpponentPawns(PawnController pawnController)
+        private List<CpuPawn> FindPawnsWithNearbyOpponentPawns()
         {
-            var cpuPawnsWithAction = pawnController.PawnsInGame
+            var cpuPawnsWithAction = _pawnController.PawnsInGame
                 .OfType<CpuPawn>()
-                .Where(cpuPawn => pawnController.PawnsInGame
+                .Where(cpuPawn => _pawnController.PawnsInGame
                     .OfType<PlayerPawn>()
                     .Any(playerPawn => !ReferenceEquals(cpuPawn, playerPawn) &&
-                                       Math.Abs(cpuPawn.PositionX - playerPawn.PositionX) == 1 &&
-                                       Math.Abs(cpuPawn.PositionY - playerPawn.PositionY) == 1))
+                    Math.Abs(cpuPawn.PositionX - playerPawn.PositionX) == 1 &&
+                    Math.Abs(cpuPawn.PositionY - playerPawn.PositionY) == 1))
                 .ToList();
 
             return cpuPawnsWithAction;
@@ -125,16 +127,20 @@ namespace Z2J_104_Checkers
             foreach (var pawn in pawnsWithAction)
             {
                 (int newPositionX, int newPositionY) = TrySetNewPositionForTwoFieldMove(pawn);
-                if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, pawn, newPositionY, newPositionX))
-                {
-                    pawnController.MoveCpuPawn(pawn, newPositionX, newPositionY);
-                    Debug.Print("YES");
-                    counterOfFailMove = 0;
-                    return true;
+
+                if (MovementAnalyzer.IsValidField(board, newPositionX, newPositionY))
+                    {
+                    if (_movementAnalyzer.IsAllowedMovement(board, _pawnController.PawnsInGame, pawn, newPositionY, newPositionX))
+                    {
+                        _pawnController.MoveCpuPawn(pawn, newPositionX, newPositionY);
+                        Debug.Print("YES");
+                        counterOfFailMove = 0;
+                        return true;
+                    }                   
                 }
                 counterOfFailMove++;
             }
-            
+
             return false;
         }
 
@@ -142,9 +148,9 @@ namespace Z2J_104_Checkers
         {
             CpuPawn cpuPawn = SearchForFrontPawn(board);
             (newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);
-            if (movementAnalyzer.IsAllowedMovement(board, pawnController.PawnsInGame, cpuPawn, newPositionY, newPositionX))
+            if (_movementAnalyzer.IsAllowedMovement(board, _pawnController.PawnsInGame, cpuPawn, newPositionY, newPositionX))
             {
-                pawnController.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
+                _pawnController.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
                 return;
             }
         }

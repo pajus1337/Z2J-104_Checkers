@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Z2J_104_Checkers
+namespace Z2J_104_Checkers.BoardServices
 {
     public class Board
     {
@@ -14,7 +14,7 @@ namespace Z2J_104_Checkers
         public int WidthY { get; private set; }
         public char[,] boardArray { get; set; }
 
-    public Board()
+        public Board()
         {
             WhiteField = '\u2588';
             BlackField = '\u2593';

@@ -4,10 +4,11 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Z2J_104_Checkers.Interfaces;
 
-namespace Z2J_104_Checkers
+namespace Z2J_104_Checkers.BoardServices
 {
-    public class BoardView
+    public class BoardView : IBoardView
     {
         private StringBuilder stringBuilder;
 
@@ -23,7 +24,7 @@ namespace Z2J_104_Checkers
             stringBuilder.Append(' ');
             for (int i = 0; i < board.WidthY; i++)
             {
-                stringBuilder.Append(((char)asciiChar));
+                stringBuilder.Append((char)asciiChar);
                 asciiChar++;
                 if (i == board.WidthX - 1)
                 {
@@ -52,8 +53,8 @@ namespace Z2J_104_Checkers
             asciiChar = 65;
             stringBuilder.Append(' ');
             for (int i = 0; i < board.WidthY; i++)
-            {          
-                stringBuilder.Append(((char)asciiChar));
+            {
+                stringBuilder.Append((char)asciiChar);
                 asciiChar++;
                 if (i == board.WidthX - 1)
                 {

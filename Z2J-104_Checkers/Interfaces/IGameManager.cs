@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Z2J_104_Checkers.BoardServices;
 
-namespace Z2J_104_Checkers
+namespace Z2J_104_Checkers.Interfaces
 {
     public interface IGameManager
     {
-        public Board GetBoard();
-        public MovementAnalyzer GetMovementAnalyzer();
-        public void TurnEnds();
+        Board GetBoard();
+        void InitGame();
     }
 }

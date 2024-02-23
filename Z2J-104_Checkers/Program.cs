@@ -1,4 +1,7 @@
 ﻿using System.Threading.Channels;
+using Microsoft.Extensions.DependencyInjection;
+using Z2J_104_Checkers.BoardServices;
+using Z2J_104_Checkers.Interfaces;
 
 namespace Z2J_104_Checkers
 {
@@ -6,17 +9,22 @@ namespace Z2J_104_Checkers
     {
         static void Main(string[] args)
         {
-            MenuView menuView = new MenuView();
-            GameManager gameManager = new GameManager(menuView);
+
+            var services = new ServiceCollection();
+            DependencyInjectionConfig.ConfigureServices(services);
+            var serviceProvider = services.BuildServiceProvider();
+            var gameManager = serviceProvider.GetRequiredService<GameManager>();
+            //  MenuView _menuView = new MenuView();
+
 
             do
             {
-            int chosenOption = menuView.MainMenuOptionsView();
+            int chosenOption = UserInputValidator.ValidateAndSetMainMenuInput();
             switch (chosenOption)
             {
                 case 1:
                     Console.WriteLine("Start Game");
-                    gameManager.test();
+                        gameManager.InitGame();
                     break;
                 case 2:
                     Console.WriteLine("Option 2");

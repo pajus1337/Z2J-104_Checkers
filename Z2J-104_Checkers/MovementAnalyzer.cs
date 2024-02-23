@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Z2J_104_Checkers.BoardServices;
+using Z2J_104_Checkers.Interfaces;
 
 namespace Z2J_104_Checkers
 {
-    public class MovementAnalyzer
+    public class MovementAnalyzer : IMovementAnalyzer
     {
-        public bool IsEnemyPawnCapturedOnLastMove { get; set; }
+        private Pawn _enemyPawn { get; set; }
+        public bool IsEnemyPawnCapturedOnLastMove { get; private set; }
         public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
 
         {
@@ -22,8 +25,8 @@ namespace Z2J_104_Checkers
                 return false;
             }
 
-            bool isBlackField = IsABlackColorField(board, newPositionX, newPositionY);
-            if (!isBlackField)
+            bool IsBlackField = IsValidField(board, newPositionX, newPositionY);
+            if (!IsBlackField)
             {
                 return false;
             }
@@ -45,8 +48,9 @@ namespace Z2J_104_Checkers
             if (isTwoFieldMove)
             {
                 isCaptureOfPawnPossible = IsCaptureOfOpponentsPawnPossible(board, listOfPawns, pawn, newPositionX, newPositionY);
-                if (isCaptureOfPawnPossible)
+                if (isCaptureOfPawnPossible &&  Math.Abs(newPositionY - _enemyPawn.PositionY) == 1 && Math.Abs(newPositionX - _enemyPawn.PositionX) == 1)
                 {
+                    listOfPawns.Remove(_enemyPawn);
                     IsEnemyPawnCapturedOnLastMove = true;
                     return true;
                 }
@@ -60,18 +64,7 @@ namespace Z2J_104_Checkers
             return false;
         }
 
-
-
-        private static bool IsABlackColorField(Board board, int positionX, int positionY)
-        {
-            if (board.boardArray[positionY, positionX] == board.BlackField)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private static bool IsEmptyField(Board board, int positionX, int positionY)
+        public static bool IsValidField(Board board, int positionX, int positionY)
         {
             if (board.boardArray[positionY, positionX] == board.BlackField)
             {
@@ -116,7 +109,7 @@ namespace Z2J_104_Checkers
         // replace remove of pawn into other class pawncontroller, or req true before execute it
         private bool IsCaptureOfOpponentsPawnPossible(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionX, int newPositionY)
          {
-            if (IsEmptyField(board, newPositionX, newPositionY))
+            if (IsValidField(board, newPositionX, newPositionY))
             {
                 if (pawn.IsPlayer && !pawn.IsSuperPawn)
                 {
@@ -142,7 +135,7 @@ namespace Z2J_104_Checkers
 
                     if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
                     {
-                        listOfPawns.Remove(enemyPawn);
+                        _enemyPawn = enemyPawn;
                         return true;
                     }
                 }
