@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Z2J_104_Checkers.BoardServices;
+using Microsoft.Extensions.Logging;
 
 namespace Z2J_104_Checkers
 {
@@ -13,6 +14,15 @@ namespace Z2J_104_Checkers
     {
         public static void ConfigureServices(IServiceCollection services)
         {
+            // For debug purpose ( TO Remove ) // 
+            services.AddLogging(configure =>
+            {
+                configure.AddConsole();
+                configure.AddDebug(); 
+            })
+              .Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Information);
+            // End of Debug Code
+
             services.AddTransient<IBoardView, BoardView>();
             services.AddSingleton<BoardBuilder>();
             services.AddSingleton<Board>();
@@ -32,6 +42,8 @@ namespace Z2J_104_Checkers
             services.AddSingleton<CpuPawn>();
             services.AddSingleton<PlayerPawn>();
             services.AddSingleton<List<Pawn>>(new List<Pawn>());
+
+            services.AddSingleton<IGameStatusSender, GameStatusSender>();
         }
     }
 }

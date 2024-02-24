@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Extensions.Logging;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using Z2J_104_Checkers.BoardServices;
 using Z2J_104_Checkers.Interfaces;
 
@@ -9,14 +12,16 @@ namespace Z2J_104_Checkers
         public List<Pawn> PawnsInGame { get; private set; }
         private readonly IMovementAnalyzer _movementAnalyzer;
         private readonly IGameStateController _gameStateController;
+        private readonly IGameStatusSender _gameStatusSender;
         int chosenPositionX = -1;
         int chosenPositionY = -1;
 
-        public PawnController(IMovementAnalyzer movementAnalyzer, IGameStateController gameStateController, List<Pawn> pawnsInGame)
+        public PawnController(IMovementAnalyzer movementAnalyzer, IGameStateController gameStateController, IGameStatusSender gameStatusSender, List<Pawn> pawnsInGame)
         {
             PawnsInGame = pawnsInGame;
             _gameStateController = gameStateController;
             _movementAnalyzer = movementAnalyzer;
+            _gameStatusSender = gameStatusSender;
         }
 
         public Board PlacePawnsForNewGame(Board board)
@@ -34,13 +39,6 @@ namespace Z2J_104_Checkers
                     }
                 }
             }
-
-            //TEST TO REMOVE !! ! ! ! ! ! ! ! !
-            //var dummyPawn = new PlayerPawn(2,3);
-            //PawnsInGame.Add(dummyPawn);
-            //board.boardArray[dummyPawn.PositionY,dummyPawn.PositionX] = dummyPawn.PawnSymbol;
-            /// END 
-            /// 
 
             for (int y = 5; y <= 7; y++)
             {
@@ -69,10 +67,8 @@ namespace Z2J_104_Checkers
         public Pawn SelectPawn()
         {
             Pawn? pawn;
-
             do
             {
-
                 MenuView.SelectPawnToMove();
 
                 int letters_axis = MenuView.EntryPosition(nameof(letters_axis));
@@ -84,23 +80,19 @@ namespace Z2J_104_Checkers
                 {
                     return selectedPawn;
                 }
+
                 pawn = selectedPawn;
                 MenuView.WrongPawnChoice();
-
             } while (pawn == null);
+
             return pawn;
         }
 
         public (int, int) SelectNewPawnPosition()
         {
             MenuView.SelectNewPostionForPawn();
-
             int letters_axis = MenuView.EntryPosition(nameof(letters_axis));
             int digits_axis = MenuView.EntryPosition(nameof(digits_axis));
-
-            // Add MovementAnalyzer
-
-
             return (x: digits_axis, y: letters_axis);
         }
 
@@ -109,46 +101,31 @@ namespace Z2J_104_Checkers
             int newPositionY;
             int newPositionX;
             var gameBoard = board;
-            var SelectedPawn = SelectPawn();
-
+            var selectedPawn = SelectPawn();
             (newPositionY, newPositionX) = SelectNewPawnPosition();
 
-
-            if (_movementAnalyzer.IsAllowedMovement(gameBoard, PawnsInGame, SelectedPawn, newPositionY, newPositionX))
+            if (_movementAnalyzer.IsAllowedMovement(gameBoard, PawnsInGame, selectedPawn, newPositionY, newPositionX))
             {
-                SelectedPawn.PositionX = newPositionX;
-                SelectedPawn.PositionY = newPositionY;
-                if (!_movementAnalyzer.IsEnemyPawnCapturedOnLastMove)
-                {
-                    _gameStateController.TurnEnds();
-                }
-                else
-                {
-                    MenuView.MoveFailed();
-                }
+                _gameStatusSender.SendStatus($"Player : Moving -> {selectedPawn.ToString()}\nPlayer : To new Position X : {newPositionX} , Y : {newPositionY}");
+                selectedPawn.PositionX = newPositionX;
+                selectedPawn.PositionY = newPositionY;
+                _gameStatusSender.SendStatus("**** **** PLAYER TURN ENDS **** ****");
+                _gameStateController.TurnEnds();
             }
         }
 
         public void MoveCpuPawn(CpuPawn cpuPawnInAction, int newPositionX, int newPositionY)
         {
+            _gameStatusSender.SendStatus($"CPU : Moving -> {cpuPawnInAction.ToString()}\nCPU : To new Position X : {newPositionX} , Y : {newPositionY}");
             cpuPawnInAction.PositionX = newPositionX;
             cpuPawnInAction.PositionY = newPositionY;
-            
-            if (!_movementAnalyzer.IsEnemyPawnCapturedOnLastMove)
-            {
-                    _gameStateController.TurnEnds();
-                }
+            _gameStatusSender.SendStatus("**** **** CPU TURN ENDS **** ****");
+            _gameStateController.TurnEnds();
         }
 
         public void RemovePawn(Pawn pawn)
         {
             PawnsInGame.Remove(pawn);
-        }
-
-        public bool CheckIfPawnExistOnBoard(int x, int y) => PawnsInGame.Any(p => p.PositionX == x && p.PositionY == y);
-
-        public void TurnEnds()
-        {
         }
     }
 }

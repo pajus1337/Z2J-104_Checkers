@@ -38,6 +38,7 @@ namespace Z2J_104_Checkers
             SetupTurnHandlers();
             currentTurn = Turn.Player;
             PlayerTurnStart();
+            
         }
 
         public void TurnEnds()

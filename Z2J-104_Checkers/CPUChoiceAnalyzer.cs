@@ -9,7 +9,7 @@ namespace Z2J_104_Checkers
 
         private readonly IMovementAnalyzer _movementAnalyzer;
         public Board Board { get; private set; }
-       // private readonly IPawnControllerFactory _pawnControllerFactory;
+        // private readonly IPawnControllerFactory _pawnControllerFactory;
         private readonly Lazy<IPawnController> _pawnController;
         private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
@@ -31,16 +31,16 @@ namespace Z2J_104_Checkers
             do
             {
                 isMovementAccomplished = IsPawnSetActionCompleted();
-            } while (!isMovementAccomplished || (isMovementAccomplished && _movementAnalyzer.IsEnemyPawnCapturedOnLastMove));
+            } while (!isMovementAccomplished);
         }
 
         /// <summary>
-        /// Searches for a pawn at the front.
+        /// Searches for a cpuPawn at the front.
         /// </summary>
         /// <param name="board">The game board on which the search is to be conducted.</param>
         /// <returns>
-        /// A <see cref="CpuPawn"/> object representing the front cpu pawn.
-        /// May return null if a suitable pawn is not found !
+        /// A <see cref="CpuPawn"/> object representing the front cpu cpuPawn.
+        /// May return null if a suitable cpuPawn is not found !
         /// </returns>
         private CpuPawn SearchForFrontPawn(Board board)
         {
@@ -115,10 +115,24 @@ namespace Z2J_104_Checkers
             return cpuPawnsWithAction;
         }
 
+        private List<CpuPawn> GetPawnWithValidOneFieldMove()
+        {
+            var allPawns = _pawnController.Value.PawnsInGame;
+            var cpuPawnsWithValidMove = allPawns.OfType<CpuPawn>()
+                .Where(cpuPawn =>
+                    !allPawns.Any(pawn =>
+                        (pawn.PositionY == cpuPawn.PositionY + 1 && pawn.PositionX == cpuPawn.PositionX - 1) ||
+                        (pawn.PositionY == cpuPawn.PositionY + 1 && pawn.PositionX == cpuPawn.PositionX + 1)
+                    )
+                ).ToList();
+
+            return cpuPawnsWithValidMove;
+        }
+
         private bool IsPawnSetActionCompleted()
         {
 
-            if (pawnsWithAction.Count == 0 || counterOfFailMove == pawnsWithAction.Count * 2)
+            if (pawnsWithAction.Count == 0 || counterOfFailMove >= pawnsWithAction.Count * 2)
             {
                 TryToMoveWithoutAction();
                 counterOfFailMove = 0;
@@ -130,14 +144,14 @@ namespace Z2J_104_Checkers
                 (int newPositionX, int newPositionY) = TrySetNewPositionForTwoFieldMove(pawn);
 
                 if (MovementAnalyzer.IsValidField(Board, newPositionX, newPositionY))
-                    {
+                {
                     if (_movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, pawn, newPositionY, newPositionX))
                     {
                         _pawnController.Value.MoveCpuPawn(pawn, newPositionX, newPositionY);
                         Debug.Print("YES");
                         counterOfFailMove = 0;
                         return true;
-                    }                   
+                    }
                 }
                 counterOfFailMove++;
             }
@@ -147,13 +161,28 @@ namespace Z2J_104_Checkers
 
         private void TryToMoveWithoutAction()
         {
-            CpuPawn cpuPawn = SearchForFrontPawn(Board);
-            (newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);
-            if (_movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, cpuPawn, newPositionY, newPositionX))
+            var pawnsWithValidMove = GetPawnWithValidOneFieldMove();
+
+            // Add Logic for condition where we do not have more ValidMove, could mean we have reach the gameover point :)
+
+            foreach (var cpuPawn in pawnsWithValidMove)
             {
-                _pawnController.Value.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
-                return;
+                (newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);
+                if (_movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, cpuPawn, newPositionY, newPositionX))
+                {
+                    _pawnController.Value.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
+                    return;
+                }
+
             }
+
+            // CpuPawn cpuPawn = SearchForFrontPawn(Board);
+            //(newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);
+            //if (_movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, cpuPawn, newPositionY, newPositionX))
+            //{
+            //    _pawnController.Value.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
+            //    return;
+            //}
         }
     }
 }

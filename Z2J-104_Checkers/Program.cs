@@ -9,12 +9,13 @@ namespace Z2J_104_Checkers
     {
         static void Main(string[] args)
         {
-
+            Console.Title = "Main Game Window - Checkers Z2J-104";
             var services = new ServiceCollection();
             DependencyInjectionConfig.ConfigureServices(services);
             var serviceProvider = services.BuildServiceProvider();
             var gameManager = serviceProvider.GetRequiredService<GameManager>();
-            //  MenuView _menuView = new MenuView();
+            var gameStatusSender = serviceProvider.GetRequiredService<IGameStatusSender>();
+
 
 
             do
@@ -24,6 +25,7 @@ namespace Z2J_104_Checkers
             {
                 case 1:
                     Console.WriteLine("Start Game");
+                        gameStatusSender.SendStatus("Start Game");
                         gameManager.InitGame();
                     break;
                 case 2:

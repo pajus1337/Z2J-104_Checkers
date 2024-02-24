@@ -12,8 +12,14 @@ namespace Z2J_104_Checkers
 {
     public class MovementAnalyzer : IMovementAnalyzer
     {
-        private Pawn _enemyPawn { get; set; }
         public bool IsEnemyPawnCapturedOnLastMove { get; private set; }
+        private readonly IGameStatusSender _gameStatusSender;
+
+        public MovementAnalyzer(IGameStatusSender gameStatusSender)
+        {
+            _gameStatusSender = gameStatusSender;
+        }
+
         public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
 
         {
@@ -44,14 +50,13 @@ namespace Z2J_104_Checkers
             }
 
             bool isTwoFieldMove = IsTwoFieldMove(board, pawn, newPositionY);
-            bool isCaptureOfPawnPossible = false;
+
             if (isTwoFieldMove)
             {
+                bool isCaptureOfPawnPossible = false;
                 isCaptureOfPawnPossible = IsCaptureOfOpponentsPawnPossible(board, listOfPawns, pawn, newPositionX, newPositionY);
-                if (isCaptureOfPawnPossible &&  Math.Abs(newPositionY - _enemyPawn.PositionY) == 1 && Math.Abs(newPositionX - _enemyPawn.PositionX) == 1)
-                {
-                    listOfPawns.Remove(_enemyPawn);
-                    IsEnemyPawnCapturedOnLastMove = true;
+                if (isCaptureOfPawnPossible)
+                {                    
                     return true;
                 }
                 return false;
@@ -100,10 +105,7 @@ namespace Z2J_104_Checkers
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         // replace remove of pawn into other class pawncontroller, or req true before execute it
@@ -111,31 +113,31 @@ namespace Z2J_104_Checkers
          {
             if (IsValidField(board, newPositionX, newPositionY))
             {
-                if (pawn.IsPlayer && !pawn.IsSuperPawn)
+                int midPointX = (pawn.PositionX + newPositionX) / 2;
+                int midPointY = (pawn.PositionY + newPositionY) / 2;
+
+                if (pawn.IsPlayer)
                 {
-                    // to refactor 
-                    //if (listOfPawns.Any(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY - 1))
-                    //{
-
-                    var enemyPawn = listOfPawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY - 1);
-
-                    if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
+                    var enemyPawn = listOfPawns.FirstOrDefault(p => p.PositionX == midPointX && p.PositionY == midPointY);
+                    if (enemyPawn != null && enemyPawn.PawnSymbol == CpuPawn.CPU_PAWN_SYMBOL)
                     {
+                        _gameStatusSender.SendStatus($"System : Player Captured CPU {enemyPawn.ToString()}\nSystem : +1 Score");
                         listOfPawns.Remove(enemyPawn);
-
+                        IsEnemyPawnCapturedOnLastMove = true;
                         return true;
                     }
                 }
 
-
                 else if (!pawn.IsPlayer)
                 {
-                    // to refactor 
-                    var enemyPawn = listOfPawns.FirstOrDefault(p => p.PositionX == pawn.PositionX - 1 | p.PositionX == pawn.PositionX + 1 && p.PositionY == pawn.PositionY + 1);
 
-                    if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL && Math.Abs(enemyPawn.PositionX - newPositionX) == 1)
+                    var enemyPawn = listOfPawns.FirstOrDefault(p => p.PositionX == midPointX && p.PositionY == midPointY);
+
+                    if (enemyPawn != null && enemyPawn.PawnSymbol == PlayerPawn.PLAYER_PAWN_SYMBOL)
                     {
-                        _enemyPawn = enemyPawn;
+                        _gameStatusSender.SendStatus($"System : CPU Captured Player {enemyPawn.ToString()}\nSystem : +1 Score");
+                        listOfPawns.Remove(enemyPawn);
+                        IsEnemyPawnCapturedOnLastMove = true;
                         return true;
                     }
                 }

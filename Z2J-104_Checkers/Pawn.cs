@@ -8,6 +8,7 @@ namespace Z2J_104_Checkers
 {
     public class Pawn 
     {
+        private static int lastPawnId = 0;
         public int PawnId { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
@@ -15,12 +16,18 @@ namespace Z2J_104_Checkers
         public bool IsPlayer { get; set; }
         public bool IsSuperPawn { get; private set; } = false;
 
-        public Pawn(int postionX, int positionY, char pawnSymbol, bool is_Player)
+        public Pawn(int positionX, int positionY, char pawnSymbol, bool is_Player)
         {
-            PositionX = postionX;
+            PositionX = positionX;
             PositionY = positionY;
             PawnSymbol = pawnSymbol;
             IsPlayer = is_Player;
+            PawnId = ++lastPawnId;
+        }
+
+        public override string ToString()
+        {
+            return $"Pawn ID : {this.PawnId} on Position X : {PositionX} , Y : {PositionY}";
         }
     }
 }

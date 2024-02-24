@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Z2J_104_Checkers
 {
     public class GameManager : IGameManager
     {
+
         public Board GameBoard { get; private set; }
         private readonly IGameStateController _gameStateController;
         private readonly IPawnControllerFactory _pawnControllerFactory;
