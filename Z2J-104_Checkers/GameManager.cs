@@ -15,15 +15,18 @@ namespace Z2J_104_Checkers
         private readonly IGameStateController _gameStateController;
         private readonly IPawnControllerFactory _pawnControllerFactory;
         private IPawnController _pawnController;
+        private Board _board;
         public bool IsGameOver { get; private set; }
         private readonly bool _isGameOver = false;
         public int PlayerScore { get; set; } = 0;
         public int CPUScore { get; set; } = 0;
 
 
-        public GameManager(IGameStateController gameStateController)
+        public GameManager(IGameStateController gameStateController, IPawnControllerFactory pawnControllerFactory, Board board)
         {
+            _pawnControllerFactory = pawnControllerFactory;
             _gameStateController = gameStateController;
+            _board = board;
             InitBoard();
         }
 
@@ -44,7 +47,9 @@ namespace Z2J_104_Checkers
         private void InitBoard()
         {
             _pawnController = _pawnControllerFactory.CreatePawnController();
-            GameBoard = _pawnController.PlacePawnsForNewGame(BoardBuilder.CreateNewGameBoard());
+            BoardBuilder.CreateNewGameBoard(_board);
+            var initBoard = _pawnController.PlacePawnsForNewGame(_board);
+            GameBoard = initBoard;
         }
 
         public void Run()

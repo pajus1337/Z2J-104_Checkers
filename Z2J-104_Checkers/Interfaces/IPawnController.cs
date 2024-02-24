@@ -14,7 +14,7 @@ namespace Z2J_104_Checkers.Interfaces
         Pawn CreatePawn(int positionX, int positionY, bool isPlayerPawn);
         Pawn SelectPawn();
         (int, int) SelectNewPawnPosition();
-        void MovePlayerPawn();
+        void MovePlayerPawn(Board board);
         void MoveCpuPawn(CpuPawn cpuPawnInAction, int newPositionX, int newPositionY);
         void RemovePawn(Pawn pawn);
     }

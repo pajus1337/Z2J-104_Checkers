@@ -14,13 +14,24 @@ namespace Z2J_104_Checkers
         public static void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IBoardView, BoardView>();
+            services.AddSingleton<BoardBuilder>();
+            services.AddSingleton<Board>();
+
             services.AddSingleton<IPawnControllerFactory, PawnControllerFactory>();
             services.AddSingleton<IPawnController, PawnController>();
-            services.AddSingleton<IGameManager, GameManager>();
-            services.AddSingleton<IMovementAnalyzer, MovementAnalyzer>();
-            services.AddSingleton<IGameStateController, GameStateController>();
+            services.AddTransient(typeof(Lazy<>), typeof(LazilyResolved<>));
+
             services.AddSingleton<GameManager>();
-            services.AddTransient<BoardBuilder>();
+            services.AddSingleton<IGameManager, GameManager>();
+            services.AddSingleton<IGameStateController, GameStateController>();
+
+            services.AddSingleton<IMovementAnalyzer, MovementAnalyzer>();
+            services.AddSingleton<ICPUChoiceAnalyzer, CPUChoiceAnalyzer>();
+
+            services.AddSingleton<Pawn>();
+            services.AddSingleton<CpuPawn>();
+            services.AddSingleton<PlayerPawn>();
+            services.AddSingleton<List<Pawn>>(new List<Pawn>());
         }
     }
 }

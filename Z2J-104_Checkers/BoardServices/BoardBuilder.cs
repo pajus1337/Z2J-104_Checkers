@@ -8,12 +8,7 @@ namespace Z2J_104_Checkers.BoardServices
 {
     public class BoardBuilder
     {
-        public static Board CreateNewGameBoard()
-        {
-            Board board = new Board();
-            FillNewBoard(board);
-            return board;
-        }
+        public static void CreateNewGameBoard(Board board) => FillNewBoard(board);
 
         private static void FillNewBoard(Board board)
         {

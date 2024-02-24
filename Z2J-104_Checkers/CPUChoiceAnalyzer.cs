@@ -8,18 +8,19 @@ namespace Z2J_104_Checkers
     {
 
         private readonly IMovementAnalyzer _movementAnalyzer;
-        Board board;
-        private readonly IPawnController _pawnController;
+        public Board Board { get; private set; }
+       // private readonly IPawnControllerFactory _pawnControllerFactory;
+        private readonly Lazy<IPawnController> _pawnController;
         private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
         private int newPositionY;
         private int counterOfFailMove = 0;
 
-        public CPUChoiceAnalyzer(Board board, IMovementAnalyzer movementAnalyzer, IPawnController pawnController)
+        public CPUChoiceAnalyzer(Board board, IMovementAnalyzer movementAnalyzer, Lazy<IPawnController> pawnControllerFactory)
         {
-            this._pawnController = pawnController;
-            this._movementAnalyzer = movementAnalyzer;
-            this.board = board;
+            _pawnController = pawnControllerFactory;
+            _movementAnalyzer = movementAnalyzer;
+            Board = board;
         }
 
         public void PickAndMoveCPUPawn()
@@ -49,7 +50,7 @@ namespace Z2J_104_Checkers
                 {
                     if (board.boardArray[y, x] == CpuPawn.CPU_PAWN_SYMBOL)
                     {
-                        var pawn = _pawnController.PawnsInGame.OfType<CpuPawn>().FirstOrDefault(p => p.PositionX == x && p.PositionY == y);
+                        var pawn = _pawnController.Value.PawnsInGame.OfType<CpuPawn>().FirstOrDefault(p => p.PositionX == x && p.PositionY == y);
                         if (pawn != null)
                         {
                             return pawn;
@@ -65,14 +66,14 @@ namespace Z2J_104_Checkers
             int newPositionY = -1;
             int newPositionX = -1;
 
-            if (cpuPawn.PositionY + 2 < board.WidthY)
+            if (cpuPawn.PositionY + 2 < Board.WidthY)
             {
                 newPositionY = cpuPawn.PositionY + 2;
                 if (cpuPawn.PositionX - 2 >= 0)
                 {
                     newPositionX = cpuPawn.PositionX - 2;
                 }
-                else if (cpuPawn.PositionX + 2 < board.WidthX)
+                else if (cpuPawn.PositionX + 2 < Board.WidthX)
                 {
                     newPositionX = cpuPawn.PositionX + 2;
                 }
@@ -85,14 +86,14 @@ namespace Z2J_104_Checkers
             int newPositionY = -1;
             int newPositionX = -1;
 
-            if (cpuPawn.PositionY + 1 < board.WidthY)
+            if (cpuPawn.PositionY + 1 < Board.WidthY)
             {
                 newPositionY = cpuPawn.PositionY + 1;
                 if (cpuPawn.PositionX - 1 > 0)
                 {
                     newPositionX = cpuPawn.PositionX - 1;
                 }
-                else if (cpuPawn.PositionX + 1 < board.WidthX)
+                else if (cpuPawn.PositionX + 1 < Board.WidthX)
                 {
                     newPositionX = cpuPawn.PositionX + 1;
                 }
@@ -102,9 +103,9 @@ namespace Z2J_104_Checkers
 
         private List<CpuPawn> FindPawnsWithNearbyOpponentPawns()
         {
-            var cpuPawnsWithAction = _pawnController.PawnsInGame
+            var cpuPawnsWithAction = _pawnController.Value.PawnsInGame
                 .OfType<CpuPawn>()
-                .Where(cpuPawn => _pawnController.PawnsInGame
+                .Where(cpuPawn => _pawnController.Value.PawnsInGame
                     .OfType<PlayerPawn>()
                     .Any(playerPawn => !ReferenceEquals(cpuPawn, playerPawn) &&
                     Math.Abs(cpuPawn.PositionX - playerPawn.PositionX) == 1 &&
@@ -128,11 +129,11 @@ namespace Z2J_104_Checkers
             {
                 (int newPositionX, int newPositionY) = TrySetNewPositionForTwoFieldMove(pawn);
 
-                if (MovementAnalyzer.IsValidField(board, newPositionX, newPositionY))
+                if (MovementAnalyzer.IsValidField(Board, newPositionX, newPositionY))
                     {
-                    if (_movementAnalyzer.IsAllowedMovement(board, _pawnController.PawnsInGame, pawn, newPositionY, newPositionX))
+                    if (_movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, pawn, newPositionY, newPositionX))
                     {
-                        _pawnController.MoveCpuPawn(pawn, newPositionX, newPositionY);
+                        _pawnController.Value.MoveCpuPawn(pawn, newPositionX, newPositionY);
                         Debug.Print("YES");
                         counterOfFailMove = 0;
                         return true;
@@ -146,11 +147,11 @@ namespace Z2J_104_Checkers
 
         private void TryToMoveWithoutAction()
         {
-            CpuPawn cpuPawn = SearchForFrontPawn(board);
+            CpuPawn cpuPawn = SearchForFrontPawn(Board);
             (newPositionX, newPositionY) = TrySetNewPositionForOneFieldMove(cpuPawn);
-            if (_movementAnalyzer.IsAllowedMovement(board, _pawnController.PawnsInGame, cpuPawn, newPositionY, newPositionX))
+            if (_movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, cpuPawn, newPositionY, newPositionX))
             {
-                _pawnController.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
+                _pawnController.Value.MoveCpuPawn(cpuPawn, newPositionX, newPositionY);
                 return;
             }
         }

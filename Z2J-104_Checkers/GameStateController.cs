@@ -15,20 +15,20 @@ namespace Z2J_104_Checkers
         public List<Pawn> PawnsInGame { get; set; }
 
         private readonly IBoardView _boardView;
-        private readonly IPawnController _pawnController;
         private readonly ICPUChoiceAnalyzer _cpuChoiceAnalyzer;
-
+        private readonly IPawnControllerFactory _pawnControllerFactory;
+        private IPawnController _pawnController;
         public event Action PlayerTurnStarted;
         public event Action CPUTurnStarted;
         public event Action<Board> BoardUpdate;
         public enum Turn { Player, CPU }
         private Turn currentTurn;
 
-        public GameStateController(IBoardView boardView, IPawnController pawnController, ICPUChoiceAnalyzer cpuChoiceAnalyzer, Board board, List<Pawn> pawnsInGame)
+        public GameStateController(IBoardView boardView, ICPUChoiceAnalyzer cpuChoiceAnalyzer, IPawnControllerFactory pawnControllerFactory, Board board, List<Pawn> pawnsInGame)
         {
             _boardView = boardView;
-            _pawnController = pawnController;
             _cpuChoiceAnalyzer = cpuChoiceAnalyzer;
+            _pawnControllerFactory = pawnControllerFactory;
             GameBoard = board;
             PawnsInGame = pawnsInGame;
         }
@@ -77,8 +77,9 @@ namespace Z2J_104_Checkers
 
         private void PlayerTurnStart()
         {
-            OnTurnChanged();
-            _pawnController.MovePlayerPawn();
+                        OnTurnChanged();
+            _pawnController = _pawnControllerFactory.CreatePawnController();
+            _pawnController.MovePlayerPawn(GameBoard);
         }
 
         private void CPUTurnStart()

@@ -9,16 +9,14 @@ namespace Z2J_104_Checkers
         public List<Pawn> PawnsInGame { get; private set; }
         private readonly IMovementAnalyzer _movementAnalyzer;
         private readonly IGameStateController _gameStateController;
-        private Board _board1;
         int chosenPositionX = -1;
         int chosenPositionY = -1;
 
-        public PawnController(IMovementAnalyzer movementAnalyzer, IGameStateController gameStateController, Board board)
+        public PawnController(IMovementAnalyzer movementAnalyzer, IGameStateController gameStateController, List<Pawn> pawnsInGame)
         {
-            PawnsInGame = new List<Pawn>();
+            PawnsInGame = pawnsInGame;
             _gameStateController = gameStateController;
             _movementAnalyzer = movementAnalyzer;
-            _board1 = board;
         }
 
         public Board PlacePawnsForNewGame(Board board)
@@ -106,11 +104,11 @@ namespace Z2J_104_Checkers
             return (x: digits_axis, y: letters_axis);
         }
 
-        public void MovePlayerPawn()
+        public void MovePlayerPawn(Board board)
         {
             int newPositionY;
             int newPositionX;
-            var gameBoard = _board1;
+            var gameBoard = board;
             var SelectedPawn = SelectPawn();
 
             (newPositionY, newPositionX) = SelectNewPawnPosition();
