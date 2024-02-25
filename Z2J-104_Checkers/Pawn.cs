@@ -12,9 +12,10 @@ namespace Z2J_104_Checkers
         public int PawnId { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
+        public int CountFailMove { get; set; }
+        public int CountFailAttack { get; set; }
         public char PawnSymbol { get; set; }
         public bool IsPlayer { get; set; }
-        public bool IsSuperPawn { get; private set; } = false;
 
         public Pawn(int positionX, int positionY, char pawnSymbol, bool is_Player)
         {

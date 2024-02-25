@@ -20,8 +20,6 @@ namespace Z2J_104_Checkers
         private Board _board;
         public bool IsGameOver { get; private set; }
         private readonly bool _isGameOver = false;
-        public int PlayerScore { get; set; } = 0;
-        public int CPUScore { get; set; } = 0;
 
 
         public GameManager(IGameStateController gameStateController, IPawnControllerFactory pawnControllerFactory, Board board)
@@ -66,6 +64,5 @@ namespace Z2J_104_Checkers
             IsGameOver = isGameOver;
             return isGameOver;
         }
-
     }
 }

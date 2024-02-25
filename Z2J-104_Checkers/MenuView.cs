@@ -60,7 +60,7 @@ namespace Z2J_104_Checkers
             Console.WriteLine($"Specify the position of the pawn to be moved.");       
         }
 
-        public static void SelectNewPostionForPawn()
+        public static void SelectNewPositionForPawn()
         {
             Console.WriteLine($"Specify the new position for the pawn to be moved.");
         }
@@ -72,13 +72,42 @@ namespace Z2J_104_Checkers
 
         public static void MoveFailed()
         {
-            Console.WriteLine("An impossible move was made");
+            Console.WriteLine("An impossible move was made, Confirm with any key\n");
+            Console.ReadKey();
         }
 
         public static void Gameover()
         {
             Console.WriteLine("End of the game with a result");
             Console.WriteLine($"Player Score : \n\rCPU Score: ");
+        }
+
+        public static string ScoreStatusMessage(string player, string playerCpu, int playerScore, int playerCpuScore)
+        {
+            var messageBody = string.Empty;
+            var playerCpuName = "CPU";
+            var playerName = "Player";
+            var messageId = "Status : ";
+            var messageHead = "**** **** GAME STATUS **** ****\n";
+            var messageFooter = "\n**** **** STATUS ENDS **** ****";
+
+            if (playerScore > playerCpuScore)
+            {
+                var message = $"\x1b[32m{playerName} leads\x1b[0m the game\n{messageId}{playerName} Score : {playerScore}\n{messageId}{playerCpuName} Score : {playerCpuScore}";
+                messageBody = message;
+            }
+            else if (playerScore < playerCpuScore)
+            {
+                var message = $"\u001b[31m{playerCpuName} leads\u001b[0m the game\n{messageId}{playerCpuName} Score : {playerCpuScore}\n{messageId}{playerName} Score : {playerScore}";
+                messageBody = message;
+            }
+            else
+            {                
+                var message = $"\x1b[33mWe Have draw\u001b[0m\n{messageId}{playerName} {playerScore} - {playerCpuName} {playerCpuScore}";
+                messageBody = message;
+            }
+
+            return $"{messageHead}{messageId}{messageBody}{messageFooter}";
         }
     }
 }

@@ -16,8 +16,6 @@ namespace Z2J_104_Checkers
             var gameManager = serviceProvider.GetRequiredService<GameManager>();
             var gameStatusSender = serviceProvider.GetRequiredService<IGameStatusSender>();
 
-
-
             do
             {
             int chosenOption = UserInputValidator.ValidateAndSetMainMenuInput();

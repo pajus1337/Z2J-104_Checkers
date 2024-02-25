@@ -90,7 +90,7 @@ namespace Z2J_104_Checkers
 
         public (int, int) SelectNewPawnPosition()
         {
-            MenuView.SelectNewPostionForPawn();
+            MenuView.SelectNewPositionForPawn();
             int letters_axis = MenuView.EntryPosition(nameof(letters_axis));
             int digits_axis = MenuView.EntryPosition(nameof(digits_axis));
             return (x: digits_axis, y: letters_axis);
@@ -112,6 +112,7 @@ namespace Z2J_104_Checkers
                 _gameStatusSender.SendStatus("**** **** PLAYER TURN ENDS **** ****");
                 _gameStateController.TurnEnds();
             }
+            _gameStateController.OnInvalidMove();
         }
 
         public void MoveCpuPawn(CpuPawn cpuPawnInAction, int newPositionX, int newPositionY)

@@ -9,11 +9,8 @@ namespace Z2J_104_Checkers.Interfaces
         Board GameBoard { get; }
         List<Pawn> PawnsInGame { get; set; }
 
-        event Action PlayerTurnStarted;
-        event Action CPUTurnStarted;
-        event Action<Board> BoardUpdate;
-
         void Initialize();
         void TurnEnds();
+        void OnInvalidMove();
     }
 }

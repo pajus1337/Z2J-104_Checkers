@@ -14,15 +14,6 @@ namespace Z2J_104_Checkers
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            // For debug purpose ( TO Remove ) // 
-            services.AddLogging(configure =>
-            {
-                configure.AddConsole();
-                configure.AddDebug(); 
-            })
-              .Configure<LoggerFilterOptions>(options => options.MinLevel = LogLevel.Information);
-            // End of Debug Code
-
             services.AddTransient<IBoardView, BoardView>();
             services.AddSingleton<BoardBuilder>();
             services.AddSingleton<Board>();
