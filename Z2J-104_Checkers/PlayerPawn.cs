@@ -13,6 +13,10 @@ namespace Z2J_104_Checkers
         {
 
         }
+
+        public override bool HasReachedEndBoard()
+        {
+            return this.PositionY == 0;
+        }
     }
 }
- 

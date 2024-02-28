@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Z2J_104_Checkers
 {
-    public class Pawn 
+    public abstract class Pawn 
     {
         private static int lastPawnId = 0;
         public int PawnId { get; set; }
@@ -25,6 +25,8 @@ namespace Z2J_104_Checkers
             IsPlayer = is_Player;
             PawnId = ++lastPawnId;
         }
+
+        public abstract bool HasReachedEndBoard();
 
         public override string ToString()
         {

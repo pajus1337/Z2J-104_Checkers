@@ -12,5 +12,10 @@ namespace Z2J_104_Checkers
         public CpuPawn(int postionX, int positionY) : base(postionX, positionY, 'O', false)
         {
         }
+
+        public override bool HasReachedEndBoard()
+        {
+            return this.PositionY == 7;
+        }
     }
 }

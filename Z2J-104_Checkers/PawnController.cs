@@ -109,6 +109,7 @@ namespace Z2J_104_Checkers
                 _gameStatusSender.SendStatus($"Player : Moving -> {selectedPawn.ToString()}\nPlayer : To new Position X : {newPositionX} , Y : {newPositionY}");
                 selectedPawn.PositionX = newPositionX;
                 selectedPawn.PositionY = newPositionY;
+                CheckIfPawnReachedEndBoard(selectedPawn);
                 _gameStatusSender.SendStatus("**** **** PLAYER TURN ENDS **** ****");
                 _gameStateController.TurnEnds();
             }
@@ -122,6 +123,23 @@ namespace Z2J_104_Checkers
             cpuPawnInAction.PositionY = newPositionY;
             _gameStatusSender.SendStatus("**** **** CPU TURN ENDS **** ****");
             _gameStateController.TurnEnds();
+        }
+
+        private void CheckIfPawnReachedEndBoard(Pawn pawn)
+        {
+            if (pawn.IsPlayer && pawn.HasReachedEndBoard())
+            {
+                PawnsInGame.Remove(pawn);
+                GameStateController.PlayerScore++;
+                _gameStatusSender.SendStatus($"System : Player {pawn.ToString()} reached the goal of the end board. +1 Score for Player.");
+
+            }
+            else if (!pawn.IsPlayer && pawn.HasReachedEndBoard())
+            {
+                PawnsInGame.Remove(pawn);
+                GameStateController.CPUScore++;
+                _gameStatusSender.SendStatus($"System : CPU {pawn.ToString()} reached the goal of the end board. +1 Score for Player.");
+            }
         }
 
         public void RemovePawn(Pawn pawn)
