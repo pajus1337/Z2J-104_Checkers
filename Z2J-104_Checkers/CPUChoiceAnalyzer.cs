@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
 using Z2J_104_Checkers.BoardServices;
 using Z2J_104_Checkers.Interfaces;
 
@@ -9,7 +10,6 @@ namespace Z2J_104_Checkers
 
         private readonly IMovementAnalyzer _movementAnalyzer;
         public Board Board { get; private set; }
-        // private readonly IPawnControllerFactory _pawnControllerFactory;
         private readonly Lazy<IPawnController> _pawnController;
         private List<CpuPawn> pawnsWithAction;
         private int newPositionX;
@@ -144,9 +144,12 @@ namespace Z2J_104_Checkers
                 while (pawn.CountFailAttack < maxFailAttack)
                 {                   
                     (int newPositionX, int newPositionY) = TrySetNewPositionForTwoFieldMove(pawn);
-
-                    if (MovementAnalyzer.IsValidField(Board, newPositionX, newPositionY) &&
-                        _movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, pawn, newPositionY, newPositionX))
+                    if (newPositionX == -1 || newPositionY == -1)
+                    {
+                        pawn.CountFailAttack++;
+                        continue;
+                    }
+                    if (MovementAnalyzer.IsValidField(Board, newPositionX, newPositionY) && _movementAnalyzer.IsAllowedMovement(Board, _pawnController.Value.PawnsInGame, pawn, newPositionY, newPositionX))
                     {
                         pawn.CountFailAttack = 0;
                         _pawnController.Value.MoveCpuPawn(pawn, newPositionX, newPositionY);

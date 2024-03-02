@@ -11,6 +11,5 @@ namespace Z2J_104_Checkers.Interfaces
     {
         bool IsEnemyPawnCapturedOnLastMove { get; }
         bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX);
-        // bool IsValidField(GameBoard board, int positionX, int positionY);
     }
 }

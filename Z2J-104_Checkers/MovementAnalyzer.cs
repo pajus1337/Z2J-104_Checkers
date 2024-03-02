@@ -23,7 +23,6 @@ namespace Z2J_104_Checkers
         }
 
         public bool IsAllowedMovement(Board board, List<Pawn> listOfPawns, Pawn pawn, int newPositionY, int newPositionX)
-
         {
             IsEnemyPawnCapturedOnLastMove = false;
 
@@ -39,8 +38,8 @@ namespace Z2J_104_Checkers
                 return false;
             }
 
-            bool IsBlackField = IsValidField(board, newPositionX, newPositionY);
-            if (!IsBlackField)
+            bool isPawnOnField = IsPawnOnField(listOfPawns, newPositionX, newPositionY);
+            if (isPawnOnField)
             {
                 return false;
             }
@@ -149,6 +148,9 @@ namespace Z2J_104_Checkers
             }
             return false;
         }
+
+        private bool IsPawnOnField(List<Pawn> listOfPawns, int newPositionX, int newPositionY) 
+            => listOfPawns.Any<Pawn>(n => n.PositionX == newPositionX && n.PositionY == newPositionY);      
     }
 }
 

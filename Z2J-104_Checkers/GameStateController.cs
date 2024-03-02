@@ -25,8 +25,9 @@ namespace Z2J_104_Checkers
         public event Action InvalidMovementPlayer;
         public event Action InvalidMovementPlayerCpu;
         public event Action<Board> BoardUpdate;
-        public enum Turn { Player, CPU }
-        private Turn currentTurn;
+        public enum PlayerType { Player, CPU }
+        private PlayerType currentTurn;
+        private string winner = string.Empty;
 
         public GameStateController(IBoardView boardView, ICPUChoiceAnalyzer cpuChoiceAnalyzer, IPawnControllerFactory pawnControllerFactory, IGameStatusSender gameStatusSender, Board board, List<Pawn> pawnsInGame)
         {
@@ -41,28 +42,28 @@ namespace Z2J_104_Checkers
         public void Initialize()
         {
             SetupTurnHandlers();
-            currentTurn = Turn.Player;
+            currentTurn = PlayerType.Player;
             PlayerTurnStart();
             
         }
 
         public void TurnEnds()
         {
-            if (currentTurn == Turn.Player)
+            if (currentTurn == PlayerType.Player)
             {
-                currentTurn = Turn.CPU;
+                currentTurn = PlayerType.CPU;
                 CPUTurnStarted?.Invoke();
             }
             else
             {
-                currentTurn = Turn.Player;
+                currentTurn = PlayerType.Player;
                 PlayerTurnStarted?.Invoke();
             }
         }
 
         public void OnInvalidMove()
         {
-            if (currentTurn == Turn.Player)
+            if (currentTurn == PlayerType.Player)
             {
                 InvalidMovementPlayer?.Invoke();
             }
@@ -82,7 +83,9 @@ namespace Z2J_104_Checkers
 
         private void OnTurnChanged()
         {
-            CheckGameState();
+            SendScoreMessage();
+            CheckForGameWinner();
+
             if (!IsGameOver)
             {
                 Console.Clear();
@@ -92,14 +95,14 @@ namespace Z2J_104_Checkers
             }
             else
             {
-                // Console.WriteLine("Game Over");
+                InitGameOver();
             }
         }
 
         private void PlayerTurnStart()
         {
             _gameStatusSender.SendStatus("**** **** PLAYER TURN STARTS **** ****");
-                        OnTurnChanged();
+            OnTurnChanged();
             _pawnController = _pawnControllerFactory.CreatePawnController();
             _pawnController.MovePlayerPawn(GameBoard);
         }
@@ -107,7 +110,6 @@ namespace Z2J_104_Checkers
         private void CPUTurnStart()
         {
             _gameStatusSender.SendStatus("**** **** CPU TURN STARTS **** ****");
-            //  Debug.Print("CPU TURN START");
             _cpuChoiceAnalyzer.PickAndMoveCPUPawn();
             OnTurnChanged();
             TurnEnds();
@@ -126,15 +128,44 @@ namespace Z2J_104_Checkers
             CPUTurnStart();
         }
 
-        private void CheckGameState()
-        {
-            SendScoreMessage();
-        }
-
         private void SendScoreMessage()
         {
             var scoreMessage = MenuView.ScoreStatusMessage("Player", "CPU", PlayerScore, CPUScore);
             _gameStatusSender.SendStatus(scoreMessage);
+        }
+
+        private void CheckForGameWinner()
+        {
+            int playerPawnCount = PawnsInGame.Count(n => n.IsPlayer);
+            int CpuPawnCount = PawnsInGame.Count(n => !n.IsPlayer);
+
+            if (playerPawnCount == 0) 
+            {
+                IsGameOver = true;
+
+            }
+            else if (CpuPawnCount == 0)
+            {
+                IsGameOver = true;
+                winner = PlayerType.Player.ToString();
+            }
+            else
+            {
+                IsGameOver = false;
+                winner = string.Empty;
+            }
+        }
+
+        public void InitGameOver()
+        {
+            if (PlayerScore > CPUScore)
+            {
+                winner = PlayerType.Player.ToString();
+            }
+            else
+            {
+                winner = PlayerType.CPU.ToString();
+            }
         }
     }
 }
