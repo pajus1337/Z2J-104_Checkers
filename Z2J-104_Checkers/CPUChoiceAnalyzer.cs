@@ -26,7 +26,7 @@ namespace Z2J_104_Checkers
         public void PickAndMoveCPUPawn()
         {
             bool isMovementAccomplished = false;
-            pawnsWithAction = FindPawnsWithNearbyOpponentPawns();
+            pawnsWithAction = FindPawnsWithNearbyOpponentPawn();
             isMovementAccomplished = IsPawnSetActionCompleted();
 
             if (!isMovementAccomplished)
@@ -82,7 +82,7 @@ namespace Z2J_104_Checkers
             return (newPositionX, newPositionY);
         }
 
-        private List<CpuPawn> FindPawnsWithNearbyOpponentPawns()
+        private List<CpuPawn> FindPawnsWithNearbyOpponentPawn()
         {
             var cpuPawnsWithAction = _pawnController.Value.PawnsInGame
                 .OfType<CpuPawn>()

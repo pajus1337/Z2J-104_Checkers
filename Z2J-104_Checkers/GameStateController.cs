@@ -142,12 +142,10 @@ namespace Z2J_104_Checkers
             if (playerPawnCount == 0) 
             {
                 IsGameOver = true;
-
             }
             else if (CpuPawnCount == 0)
             {
                 IsGameOver = true;
-                winner = PlayerType.Player.ToString();
             }
             else
             {
@@ -166,6 +164,7 @@ namespace Z2J_104_Checkers
             {
                 winner = PlayerType.CPU.ToString();
             }
+            MenuView.GameOver(PlayerScore, CPUScore, winner);
         }
     }
 }

@@ -22,15 +22,13 @@ namespace Z2J_104_Checkers
             switch (chosenOption)
             {
                 case 1:
-                    Console.WriteLine("Start Game");
-                        gameStatusSender.SendStatus("Start Game");
                         gameManager.InitGame();
                     break;
                 case 2:
-                    Console.WriteLine("Option 2");
+                        Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("def");
+                    Console.WriteLine("Chosen Wrong Option, Try again.");
                     break;
             }
             } while (true);

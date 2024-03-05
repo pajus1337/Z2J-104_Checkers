@@ -76,10 +76,14 @@ namespace Z2J_104_Checkers
             Console.ReadKey();
         }
 
-        public static void Gameover()
+        public static void GameOver(int playerEndScore, int playerCpuEndScore, string winnerName)
         {
-            Console.WriteLine("End of the game with a result");
-            Console.WriteLine($"Player Score : \n\rCPU Score: ");
+            Console.Clear();
+            Console.WriteLine($"GAME OVER !\nThe winner is {winnerName}\nEnd Score :");
+            Console.WriteLine($"Player Score :{playerEndScore}\nCPU Score : {playerCpuEndScore}");
+            Console.WriteLine("Press any key to Quit the game");
+            Console.ReadKey();
+
         }
 
         public static string ScoreStatusMessage(string player, string playerCpu, int playerScore, int playerCpuScore)

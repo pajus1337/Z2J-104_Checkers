@@ -38,12 +38,9 @@ namespace Z2J_104_Checkers
 
 
             } while (!IsGameOver);
+            Environment.Exit(0);
         }
 
-        public void CheckGameStatus()
-        {
-
-        }
         private void InitBoard()
         {
             _pawnController = _pawnControllerFactory.CreatePawnController();
@@ -58,11 +55,5 @@ namespace Z2J_104_Checkers
         }
 
         public Board GetBoard() => this.GameBoard;
-
-        public bool isGameOver(bool isGameOver = false)
-        {
-            IsGameOver = isGameOver;
-            return isGameOver;
-        }
     }
 }
